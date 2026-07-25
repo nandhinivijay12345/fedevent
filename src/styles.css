@@ -1,0 +1,158 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Future of Education — Editorial design system.
+ * White is confidence. Navy carries the voice. Red is a moment, not a mood.
+ */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-navy: var(--navy);
+  --color-navy-soft: var(--navy-soft);
+  --color-red: var(--red);
+  --color-red-deep: var(--red-deep);
+  --color-mist: var(--mist);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-cream: var(--cream);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--line);
+  --color-ring: var(--navy);
+
+  --font-display: "Playfair Display", "GT Sectra", ui-serif, Georgia, serif;
+  --font-sans: "Inter", -apple-system, ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", "GT Sectra", "Instrument Serif", ui-serif, Georgia, serif;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #142c73;
+  --navy: #142c73;
+  --navy-soft: #4a5b96;
+  --red: #e53935;
+  --red-deep: #c62828;
+  --mist: #f7f8fa;
+  --line: #e8eaee;
+  --ink: #0d1a3f;
+  --cream: #F4EDDC;
+
+  --muted: #f7f8fa;
+  --muted-foreground: #6b7699;
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background-color: #ffffff;
+    color: var(--navy);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--navy);
+    color: #ffffff;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    color: var(--navy);
+  }
+}
+
+/* Editorial typographic utilities */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--red);
+}
+
+@utility rule-line {
+  display: block;
+  height: 1px;
+  background: var(--line);
+  width: 100%;
+}
+
+/* Motion — restrained */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+@utility reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@utility mask-reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.6s cubic-bezier(0.77, 0, 0.175, 1);
+}
+@utility mask-in {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Marquee for horizontal speakers */
+@keyframes drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Hero line-by-line word reveal */
+@keyframes riseIn {
+  0%   { transform: translateY(110%); opacity: 0; }
+  60%  { opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.line-mask > span {
+  display: inline-block;
+  transform: translateY(110%);
+  opacity: 0;
+  animation: riseIn 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes slowZoom {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1); }
+}
+.hero-kenburns {
+  animation: slowZoom 12s ease-out forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
