@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Reveal } from "./Reveal";
 import { Link } from "@tanstack/react-router";
 import { WorldMap, MAP_W, MAP_H } from "./GlobalSummit";
-import ctaBg from "@/assets/cta-bg-2.png.asset.json";
+import ctaBg from "@/assets/cta-bg-2.png";
 
 export function FinalCTA() {
   return (
@@ -12,7 +12,7 @@ export function FinalCTA() {
           <div className="relative overflow-hidden rounded-[24px] bg-[#141F45] p-10 md:p-24 text-center">
             {/* Background photo */}
             <img
-              src={ctaBg.url}
+              src={ctaBg}
               alt=""
               aria-hidden
               className="pointer-events-none absolute inset-0 h-full w-full object-cover"

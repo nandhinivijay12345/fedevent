@@ -1,21 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import orbit1 from "@/assets/orbit1.jpg.asset.json";
-import orbit3 from "@/assets/orbit3.jpg.asset.json";
-import orbit4 from "@/assets/orbit4.jpg.asset.json";
-import futureTrends from "@/assets/future-trends.jpg.asset.json";
-import orbit6 from "@/assets/orbit6.jpg.asset.json";
-import showcase from "@/assets/story.png.asset.json";
-import bgImg from "@/assets/orbit-bg.jpg.asset.json";
+import orbit1 from "@/assets/orbit1.jpg";
+import orbit3 from "@/assets/orbit3.jpg";
+import orbit4 from "@/assets/orbit4.jpg";
+import futureTrends from "@/assets/future-trends.jpg";
+import orbit6 from "@/assets/orbit6.jpg";
+import showcase from "@/assets/story.png";
+import bgImg from "@/assets/orbit-bg.jpg";
 
 type Reason = { label: string; blurb: string; image: string };
 
 const REASONS: Reason[] = [
-  { label: "Global Recognition", blurb: "A stage that earns you a place in the conversation.", image: orbit1.url },
-  { label: "Best Practices",     blurb: "Frameworks other schools are quietly adopting.",       image: orbit6.url },
-  { label: "Expert Speakers",    blurb: "Educators who built what everyone else discusses.",    image: orbit3.url },
-  { label: "School Networking",  blurb: "The partnerships that outlast the day itself.",        image: orbit4.url },
-  { label: "Future Trends",      blurb: "Where the next five years of learning is drafted.",    image: futureTrends.url },
-  { label: "Student Showcase",   blurb: "The children rewriting what school can be.",           image: showcase.url },
+  { label: "Global Recognition", blurb: "A stage that earns you a place in the conversation.", image: orbit1 },
+  { label: "Best Practices",     blurb: "Frameworks other schools are quietly adopting.",       image: orbit6 },
+  { label: "Expert Speakers",    blurb: "Educators who built what everyone else discusses.",    image: orbit3 },
+  { label: "School Networking",  blurb: "The partnerships that outlast the day itself.",        image: orbit4 },
+  { label: "Future Trends",      blurb: "Where the next five years of learning is drafted.",    image: futureTrends },
+  { label: "Student Showcase",   blurb: "The children rewriting what school can be.",           image: showcase },
 ];
 
 const N = REASONS.length;
@@ -66,7 +66,7 @@ export function ReasonsCarousel() {
       <div
         aria-hidden
         className="absolute inset-0"
-        style={{ backgroundImage: `url(${bgImg.url})`, backgroundSize: "cover", backgroundPosition: "center" }}
+        style={{ backgroundImage: `url(${bgImg})`, backgroundSize: "cover", backgroundPosition: "center" }}
       />
       <div aria-hidden className="absolute inset-0" style={{ background: "rgba(10,20,55,0.92)" }} />
 

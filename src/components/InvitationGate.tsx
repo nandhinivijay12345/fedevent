@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import fedLogo from "@/assets/fed-logo-mark.jpg.asset.json";
+import fedLogo from "@/assets/fed-logo-mark.jpg";
 
 const SESSION_KEY = "fed26_gate_opened";
 const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
@@ -219,7 +219,7 @@ function CardFace() {
     <div className="relative flex h-full w-full flex-col items-center px-8 pt-10 pb-12 text-center">
       {/* FED logo */}
       <img
-        src={fedLogo.url}
+        src={fedLogo}
         alt="FED — Future of Education 2026"
         style={{ height: 34, width: "auto", objectFit: "contain" }}
       />

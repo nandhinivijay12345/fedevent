@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
-import slide1 from "@/assets/converge.jpg.asset.json";
-import slide2 from "@/assets/listen-3.jpg.asset.json";
-import slide3 from "@/assets/slide3.png.asset.json";
-import slide4 from "@/assets/launch.jpg.asset.json";
-import slide5 from "@/assets/slide5.jpg.asset.json";
+import slide1 from "@/assets/converge.jpg";
+import slide2 from "@/assets/listen-3.jpg";
+import slide3 from "@/assets/slide3.png";
+import slide4 from "@/assets/launch.jpg";
+import slide5 from "@/assets/slide5.jpg";
 
 type Slide = {
   word: string;
@@ -19,32 +19,32 @@ const SLIDES: Slide[] = [
     word: "Converge",
     line1: "The world's most impactful change makers on one stage.",
     line2: "Edition 04. August 24. IITM Research Park.",
-    image: slide1.url,
+    image: slide1,
   },
   {
     word: "Listen",
     line1: "Global innovators and keynote speakers.",
     line2: "The leaders shaping what learning will look like.",
-    image: slide2.url,
+    image: slide2,
   },
   {
     word: "Pitch",
     line1: "The India Challenge, hosted by Kidspreneur, the Peter Jones Foundation, and American World School is now live.",
     line2: "Student founders from around the world take the mic.",
-    image: slide3.url,
+    image: slide3,
     cta: { label: "Curious? Find Out More.", href: "https://www.kidspreneur.org" },
   },
   {
     word: "Launch",
     line1: "Student founders launch their startups live.",
     line2: "Not a demo. A debut.",
-    image: slide4.url,
+    image: slide4,
   },
   {
     word: "Crown",
     line1: "India's Top 100 Schools, verified by AIAASC and WASC.",
     line2: "Recognition that travels beyond borders.",
-    image: slide5.url,
+    image: slide5,
   },
 ];
 

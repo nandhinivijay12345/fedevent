@@ -13,7 +13,7 @@ import { HostedBy } from "@/components/HostedBy";
 import { FinalCTA } from "@/components/FinalCTA";
 
 
-import hero from "@/assets/hero-panel.jpg.asset.json";
+import hero from "@/assets/hero-panel.jpg";
 
 
 export const Route = createFileRoute("/")({
@@ -31,10 +31,10 @@ export const Route = createFileRoute("/")({
         content:
           "One day. One stage. One conversation shaping what comes next. 24 August · IIT Madras.",
       },
-      { property: "og:image", content: hero.url },
+      { property: "og:image", content: hero },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: hero.url },
+      { name: "twitter:image", content: hero },
     ],
   }),
   component: Home,
@@ -161,7 +161,7 @@ function Hero() {
                 style={{ animationDelay: "260ms", aspectRatio: "4 / 5", maxHeight: 520 }}
               >
                 <img
-                  src={hero.url}
+                  src={hero}
                   alt="FED 2024 — Third Edition"
                   className="absolute inset-0 h-full w-full object-cover"
                 />

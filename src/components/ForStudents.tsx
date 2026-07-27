@@ -2,9 +2,9 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Reveal } from "./Reveal";
-import img1 from "@/assets/students-parliament-2.jpg.asset.json";
-import img2 from "@/assets/chennai-podium.jpg.asset.json";
-import img3 from "@/assets/front-row-2.jpg.asset.json";
+import img1 from "@/assets/students-parliament-2.jpg";
+import img2 from "@/assets/chennai-podium.jpg";
+import img3 from "@/assets/front-row-2.jpg";
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -29,7 +29,7 @@ const ROWS: Row[] = [
     underlineWord: "Parliament",
     body: "The India Challenge — with Kidspreneur, the Peter Jones Foundation and American World School — puts student founders on FED's main stage. Winners take their ideas to the British Parliament.",
     cta: { label: "Enter the India Challenge", href: "https://www.kidspreneur.org", pill: true },
-    image: img1.url,
+    image: img1,
     imageObjectPosition: "center 15%",
     alt: "Students at the British Parliament",
     imageSide: "left",
@@ -41,7 +41,7 @@ const ROWS: Row[] = [
     body: "University presidents, accreditation heads, founders and policymakers — the people most students only read about, within reach.",
     underlineInBody: "within reach.",
     cta: { label: "See who's coming", href: "#voices" },
-    image: img2.url,
+    image: img2,
     alt: "Student pitching on stage",
     imageSide: "right",
   },
@@ -51,7 +51,7 @@ const ROWS: Row[] = [
     underlineWord: "before anyone else.",
     body: "AI in classrooms, startups launching live, the ideas that will shape your next decade — happening around you, not at you.",
     cta: { label: "Front row seats", href: "#reasons" },
-    image: img3.url,
+    image: img3,
     alt: "Front row experience",
     imageSide: "left",
   },

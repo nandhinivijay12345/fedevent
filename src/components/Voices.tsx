@@ -1,25 +1,25 @@
 import { useState } from "react";
 
-import p5 from "@/assets/person5.png.asset.json";
-import p6 from "@/assets/person6.png.asset.json";
-import p7 from "@/assets/person7.png.asset.json";
-import p8 from "@/assets/person8.png.asset.json";
-import p9 from "@/assets/person9.png.asset.json";
-import p10 from "@/assets/person10.png.asset.json";
-import p11 from "@/assets/person11.png.asset.json";
-import p12 from "@/assets/person12.png.asset.json";
+import p5 from "@/assets/person5.png";
+import p6 from "@/assets/person6.png";
+import p7 from "@/assets/person7.png";
+import p8 from "@/assets/person8.png";
+import p9 from "@/assets/person9.png";
+import p10 from "@/assets/person10.png";
+import p11 from "@/assets/person11.png";
+import p12 from "@/assets/person12.png";
 
 type Panelist = { name: string; title: string; org: string; image?: string };
 
 const PANELISTS: Panelist[] = [
-  { name: "Mark Noufel", title: "President", org: "University of Silicon Valley", image: p5.url },
-  { name: "Dr. Mohanalakshmi", title: "Founder", org: "American World School", image: p6.url },
-  { name: "Bill", title: "Managing Director", org: "Peter Jones Foundation", image: p11.url },
-  { name: "Dr. Margaret", title: "International Vice President", org: "WASC", image: p7.url },
-  { name: "Dr. Madhan Karky", title: "Founder", org: "Karky Research Foundation", image: p12.url },
-  { name: "Paul Montague", title: "International Director", org: "American World School", image: p9.url },
-  { name: "Bhavanishankar", title: "Director", org: "Lalaji Memorial Omega International School", image: p8.url },
-  { name: "Vimala Britto", title: "Curriculum Expert", org: "FEdy Curriculum", image: p10.url },
+  { name: "Mark Noufel", title: "President", org: "University of Silicon Valley", image: p5 },
+  { name: "Dr. Mohanalakshmi", title: "Founder", org: "American World School", image: p6 },
+  { name: "Bill", title: "Managing Director", org: "Peter Jones Foundation", image: p11 },
+  { name: "Dr. Margaret", title: "International Vice President", org: "WASC", image: p7 },
+  { name: "Dr. Madhan Karky", title: "Founder", org: "Karky Research Foundation", image: p12 },
+  { name: "Paul Montague", title: "International Director", org: "American World School", image: p9 },
+  { name: "Bhavanishankar", title: "Director", org: "Lalaji Memorial Omega International School", image: p8 },
+  { name: "Vimala Britto", title: "Curriculum Expert", org: "FEdy Curriculum", image: p10 },
 ];
 
 

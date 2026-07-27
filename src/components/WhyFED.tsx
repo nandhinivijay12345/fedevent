@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import whatisfed from "@/assets/whatisfed.jpg.asset.json";
-import story from "@/assets/story-saree.jpg.asset.json";
-import whyfedMatters from "@/assets/whyfed-matters-3.jpg.asset.json";
+import whatisfed from "@/assets/whatisfed.jpg";
+import story from "@/assets/story-saree.jpg";
+import whyfedMatters from "@/assets/whyfed-matters-3.jpg";
 
 type Slide = {
   eyebrow: string;
@@ -17,21 +17,21 @@ const SLIDES: Slide[] = [
     heading: "What is FED?",
     body: "The Future of Education (FED) is the flagship education summit hosted by American World School, bringing together educators, school leaders, students, entrepreneurs, and changemakers to explore bold ideas, showcase educational excellence, and shape the future of learning through collaboration, innovation, and thought leadership.",
     pull: "Three editions. One movement.",
-    image: whatisfed.url,
+    image: whatisfed,
   },
   {
     eyebrow: "Chapter 02",
     heading: "Story Behind FED",
     body: "FED was born from the belief that the future of education is not created in isolation but through the exchange of ideas, experiences, and perspectives. What began as an initiative by American World School has grown into a defining annual summit, bringing together the people and conversations that continue to influence education across the world.",
     pull: "A conversation that outgrew its room.",
-    image: story.url,
+    image: story,
   },
   {
     eyebrow: "Chapter 03",
     heading: "Why FED Matters",
     body: "The future of education will not be shaped by one school, one country, or one idea. It will be shaped by the collective wisdom of visionaries who come together to solve the world's greatest educational challenges. FED is where those conversations begin.",
     pull: "Where the next chapter is written.",
-    image: whyfedMatters.url,
+    image: whyfedMatters,
   },
 ];
 

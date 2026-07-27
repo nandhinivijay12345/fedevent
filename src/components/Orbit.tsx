@@ -1,12 +1,12 @@
 import { useState } from "react";
-import orbit1 from "@/assets/orbit1.jpg.asset.json";
-import orbit2 from "@/assets/orbit2.jpg.asset.json";
-import orbit3 from "@/assets/orbit3.jpg.asset.json";
-import orbit4 from "@/assets/orbit4.jpg.asset.json";
-import orbit5 from "@/assets/orbit5.jpg.asset.json";
-import orbit6 from "@/assets/orbit6.jpg.asset.json";
-import orbit7 from "@/assets/orbit7.jpg.asset.json";
-import bgImg from "@/assets/orbit-bg.jpg.asset.json";
+import orbit1 from "@/assets/orbit1.jpg";
+import orbit2 from "@/assets/orbit2.jpg";
+import orbit3 from "@/assets/orbit3.jpg";
+import orbit4 from "@/assets/orbit4.jpg";
+import orbit5 from "@/assets/orbit5.jpg";
+import orbit6 from "@/assets/orbit6.jpg";
+import orbit7 from "@/assets/orbit7.jpg";
+import bgImg from "@/assets/orbit-bg.jpg";
 
 type Item = {
   label: string;
@@ -21,13 +21,13 @@ type Item = {
 const RADIUS = 40; // % of stage half-size
 const SIZE = 168;  // px
 const BASE: Omit<Item, "angle" | "distance" | "size">[] = [
-  { label: "Top 100 Awards",     imageUrl: orbit7.url },
-  { label: "Global Recognition", imageUrl: orbit1.url },
-  { label: "Expert Speakers",    imageUrl: orbit3.url },
-  { label: "Best Practices",     imageUrl: orbit2.url },
-  { label: "Future Trends",      imageUrl: orbit5.url },
-  { label: "Student Showcase",   imageUrl: orbit6.url },
-  { label: "School Networking",  imageUrl: orbit4.url },
+  { label: "Top 100 Awards",     imageUrl: orbit7 },
+  { label: "Global Recognition", imageUrl: orbit1 },
+  { label: "Expert Speakers",    imageUrl: orbit3 },
+  { label: "Best Practices",     imageUrl: orbit2 },
+  { label: "Future Trends",      imageUrl: orbit5 },
+  { label: "Student Showcase",   imageUrl: orbit6 },
+  { label: "School Networking",  imageUrl: orbit4 },
 ];
 const ITEMS: Item[] = BASE.map((it, i) => ({
   ...it,
@@ -40,7 +40,7 @@ const ITEMS: Item[] = BASE.map((it, i) => ({
 export function Orbit() {
   const [hovered, setHovered] = useState<number | null>(null);
   const paused = hovered !== null;
-  const activeBg = hovered !== null ? ITEMS[hovered].imageUrl : bgImg.url;
+  const activeBg = hovered !== null ? ITEMS[hovered].imageUrl : bgImg;
 
   return (
     <section
@@ -52,7 +52,7 @@ export function Orbit() {
         aria-hidden
         className="absolute inset-0 transition-[background-image] duration-500"
         style={{
-          backgroundImage: `url(${bgImg.url})`,
+          backgroundImage: `url(${bgImg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

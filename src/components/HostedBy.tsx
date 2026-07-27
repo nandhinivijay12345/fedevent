@@ -1,4 +1,4 @@
-import logoAsset from "@/assets/aws-logo.png.asset.json";
+import logoAsset from "@/assets/aws-logo.png";
 
 export function HostedBy() {
   return (
@@ -16,7 +16,7 @@ export function HostedBy() {
               Presented By
             </span>
             <img
-              src={logoAsset.url}
+              src={logoAsset}
               alt="American World School"
               className="h-8 w-auto md:h-10"
             />

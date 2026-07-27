@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/fed-logo-2026.jpg.asset.json";
+import logo from "@/assets/fed-logo-2026.jpg";
 
 
 const items = [
@@ -53,7 +53,7 @@ export function Nav() {
 
       <div className="mx-auto grid h-[72px] max-w-[1280px] grid-cols-[auto_1fr_auto] items-center gap-6 px-8">
         <a href="#top" className="flex items-center" aria-label="Future of Education 2026">
-          <img src={logo.url} alt="Future of Education 2026" className="h-10 w-auto md:h-12" />
+          <img src={logo} alt="Future of Education 2026" className="h-10 w-auto md:h-12" />
         </a>
 
         <nav className="hidden items-center justify-center gap-8 lg:flex">

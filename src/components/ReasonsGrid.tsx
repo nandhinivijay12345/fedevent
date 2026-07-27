@@ -1,18 +1,18 @@
-import orbit1 from "@/assets/orbit1.jpg.asset.json";
-import orbit2 from "@/assets/orbit2.jpg.asset.json";
-import orbit3 from "@/assets/orbit3.jpg.asset.json";
-import orbit4 from "@/assets/orbit4.jpg.asset.json";
-import orbit5 from "@/assets/orbit5.jpg.asset.json";
-import orbit6 from "@/assets/orbit6.jpg.asset.json";
-import bgImg from "@/assets/orbit-bg.jpg.asset.json";
+import orbit1 from "@/assets/orbit1.jpg";
+import orbit2 from "@/assets/orbit2.jpg";
+import orbit3 from "@/assets/orbit3.jpg";
+import orbit4 from "@/assets/orbit4.jpg";
+import orbit5 from "@/assets/orbit5.jpg";
+import orbit6 from "@/assets/orbit6.jpg";
+import bgImg from "@/assets/orbit-bg.jpg";
 
 const REASONS = [
-  { label: "Global Recognition", image: orbit1.url },
-  { label: "Best Practices",     image: orbit2.url },
-  { label: "Expert Speakers",    image: orbit3.url },
-  { label: "School Networking",  image: orbit4.url },
-  { label: "Future Trends",      image: orbit5.url },
-  { label: "Student Showcase",   image: orbit6.url },
+  { label: "Global Recognition", image: orbit1 },
+  { label: "Best Practices",     image: orbit2 },
+  { label: "Expert Speakers",    image: orbit3 },
+  { label: "School Networking",  image: orbit4 },
+  { label: "Future Trends",      image: orbit5 },
+  { label: "Student Showcase",   image: orbit6 },
 ];
 
 export function ReasonsGrid() {
@@ -22,7 +22,7 @@ export function ReasonsGrid() {
         aria-hidden
         className="absolute inset-0"
         style={{
-          backgroundImage: `url(${bgImg.url})`,
+          backgroundImage: `url(${bgImg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

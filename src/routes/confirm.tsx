@@ -3,7 +3,7 @@ import { Nav } from "@/components/Nav";
 import { SuccessBlock } from "@/components/Modal";
 import { ConfirmAttendanceFields } from "@/components/FormFields";
 import { useConfirmAttendanceForm } from "@/hooks/useConfirmAttendanceForm";
-import confirmStage from "@/assets/confirm-stage.jpg.asset.json";
+import confirmStage from "@/assets/confirm-stage.jpg";
 
 const CONTACT_EMAIL = "concierge@futureofeducation.in";
 
@@ -82,7 +82,7 @@ export function FormPageShell({
               {eyebrow}
             </div>
             <img
-              src={confirmStage.url}
+              src={confirmStage}
               alt="FED 2026 stage"
               className="mt-8 aspect-[16/7] w-full rounded-2xl object-cover"
             />
