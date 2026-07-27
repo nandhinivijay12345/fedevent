@@ -152,6 +152,51 @@ export function LineSelect({
   );
 }
 
+export function TextAreaField({
+  label,
+  required,
+  maxLength,
+  rows = 3,
+  helper,
+  placeholder,
+  value,
+  onChange,
+}: {
+  label: string;
+  required?: boolean;
+  maxLength?: number;
+  rows?: number;
+  helper?: string;
+  placeholder?: string;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <label className="block">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#1B2A5E]/70">
+        {label}{required && <span className="text-[#D62828]"> *</span>}
+      </span>
+      <textarea
+        required={required}
+        maxLength={maxLength}
+        rows={rows}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="mt-2 block w-full resize-none border-0 border-b border-[#1B2A5E]/20 bg-transparent px-0 py-2 text-[15px] text-[#1B2A5E] outline-none transition-colors placeholder:text-[#1B2A5E]/30 focus:border-[#1B2A5E] focus:ring-0"
+      />
+      <div className="mt-1.5 flex items-start justify-between gap-4">
+        <span className="text-[11px] text-[#1B2A5E]/50">{helper}</span>
+        {maxLength && (
+          <span className="shrink-0 text-[11px] text-[#1B2A5E]/50 tabular-nums">
+            {value.length} / {maxLength}
+          </span>
+        )}
+      </div>
+    </label>
+  );
+}
+
 export function Stepper({
   label,
   required,

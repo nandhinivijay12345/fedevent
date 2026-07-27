@@ -60,6 +60,7 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    overflow-x: hidden;
   }
   body {
     background-color: #ffffff;
@@ -119,6 +120,17 @@
 @keyframes drift {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
+}
+
+.partner-marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 48px, black calc(100% - 48px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, black 48px, black calc(100% - 48px), transparent 100%);
+}
+@media (min-width: 768px) {
+  .partner-marquee-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 100px, black calc(100% - 100px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, black 100px, black calc(100% - 100px), transparent 100%);
+  }
 }
 
 /* Hero line-by-line word reveal */

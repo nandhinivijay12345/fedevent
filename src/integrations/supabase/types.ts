@@ -16,45 +16,81 @@ export type Database = {
     Tables: {
       confirmations: {
         Row: {
+          accreditations: string | null
           authorised: boolean
+          award_recipient_designation: string
+          award_recipient_name: string
+          award_recipient_phone: string
+          board_affiliation: string
           confirmation_code: string
           created_at: string
           designation: string
           email: string
+          founding_year: number
           id: string
+          mission: string
           phone: string
           school_name: string
+          school_type: string
+          school_type_other: string | null
           signature_url: string | null
           staff_passes: number
+          standout_milestone: string
           student_passes: number
+          total_student_strength: number
+          vision: string
           your_name: string
         }
         Insert: {
+          accreditations?: string | null
           authorised?: boolean
+          award_recipient_designation: string
+          award_recipient_name: string
+          award_recipient_phone: string
+          board_affiliation: string
           confirmation_code: string
           created_at?: string
           designation: string
           email: string
+          founding_year: number
           id?: string
+          mission: string
           phone: string
           school_name: string
+          school_type: string
+          school_type_other?: string | null
           signature_url?: string | null
           staff_passes: number
+          standout_milestone: string
           student_passes: number
+          total_student_strength: number
+          vision: string
           your_name: string
         }
         Update: {
+          accreditations?: string | null
           authorised?: boolean
+          award_recipient_designation?: string
+          award_recipient_name?: string
+          award_recipient_phone?: string
+          board_affiliation?: string
           confirmation_code?: string
           created_at?: string
           designation?: string
           email?: string
+          founding_year?: number
           id?: string
+          mission?: string
           phone?: string
           school_name?: string
+          school_type?: string
+          school_type_other?: string | null
           signature_url?: string | null
           staff_passes?: number
+          standout_milestone?: string
           student_passes?: number
+          total_student_strength?: number
+          vision?: string
           your_name?: string
         }
         Relationships: []

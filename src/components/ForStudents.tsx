@@ -147,7 +147,7 @@ function CheckerRow({ row }: { row: Row }) {
   );
 
   const contentEl = (
-    <div className="flex w-full items-center justify-center bg-white">
+    <div className="flex w-full h-full items-center justify-center bg-white">
       <div className="w-full max-w-[560px] p-10 md:p-[72px]">
         <Reveal delay={0}>
           <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#D62828]">
@@ -217,8 +217,8 @@ function CheckerRow({ row }: { row: Row }) {
         </>
       ) : (
         <>
-          <div className="order-2 md:order-1">{contentEl}</div>
-          <div className="order-1 md:order-2">{imageEl}</div>
+          <div className="order-2 md:order-1 h-full">{contentEl}</div>
+          <div className="order-1 md:order-2 h-full">{imageEl}</div>
         </>
       )}
     </div>

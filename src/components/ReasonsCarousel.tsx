@@ -19,16 +19,40 @@ const REASONS: Reason[] = [
 ];
 
 const N = REASONS.length;
-const ACTIVE_W = 440;
-const ACTIVE_H = 580;
+const CARD_ASPECT = 400 / 500;
 const SIDE_SCALE = 0.68;
-const GAP = 24;
-const OFFSET = ACTIVE_W / 2 + (ACTIVE_W * SIDE_SCALE) / 2 + GAP;
+const GAP = 20;
+
+// Everything in the viewport-height section other than the card itself
+// (nav clearance, heading, spacing, dots) — used to size the card so the
+// whole section fits within one screen at any viewport height.
+const NON_CARD_HEIGHT = 249;
+
+const DEFAULT_ACTIVE_H = 620;
+
+function computeActiveH() {
+  return Math.max(320, Math.min(680, window.innerHeight - NON_CARD_HEIGHT));
+}
 
 export function ReasonsCarousel() {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
+  // Starts at a fixed, SSR-safe value so client hydration matches the
+  // server-rendered markup exactly, then resolves to the real
+  // viewport-based size once mounted (see effect below).
+  const [activeH, setActiveH] = useState(DEFAULT_ACTIVE_H);
   const dragRef = useRef<{ x: number; active: boolean }>({ x: 0, active: false });
+
+  const ACTIVE_H = activeH;
+  const ACTIVE_W = Math.round(activeH * CARD_ASPECT);
+  const OFFSET = ACTIVE_W / 2 + (ACTIVE_W * SIDE_SCALE) / 2 + GAP;
+
+  useEffect(() => {
+    const onResize = () => setActiveH(computeActiveH());
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const wrap = useCallback((n: number) => ((n % N) + N) % N, []);
   const next = useCallback(() => setIdx((v) => wrap(v + 1)), [wrap]);
@@ -62,7 +86,7 @@ export function ReasonsCarousel() {
   };
 
   return (
-    <section id="reasons" className="relative overflow-hidden">
+    <section id="reasons" className="relative flex h-screen min-h-[620px] flex-col justify-center overflow-hidden pt-[80px]">
       <div
         aria-hidden
         className="absolute inset-0"
@@ -71,7 +95,7 @@ export function ReasonsCarousel() {
       <div aria-hidden className="absolute inset-0" style={{ background: "rgba(10,20,55,0.92)" }} />
 
       <div
-        className="relative py-24 md:py-28"
+        className="relative"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
@@ -79,13 +103,13 @@ export function ReasonsCarousel() {
           <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#FF5A5A]">
             What You Gain
           </div>
-          <h2 className="mt-4 max-w-[22ch] font-serif text-[clamp(2rem,4.4vw,3.75rem)] font-medium leading-[1.05] tracking-[-0.02em] text-white">
+          <h2 className="mt-2 max-w-[22ch] font-serif text-[clamp(1.75rem,3.6vw,3rem)] font-medium leading-[1.05] tracking-[-0.02em] text-white">
             Six reasons to be in the room<span className="text-[#FF5A5A]">.</span>
           </h2>
         </div>
 
         <div
-          className="relative mx-auto mt-14 flex items-center justify-center select-none"
+          className="relative mx-auto mt-5 flex items-center justify-center select-none"
           style={{ height: ACTIVE_H + 40 }}
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
@@ -148,38 +172,47 @@ export function ReasonsCarousel() {
                       "linear-gradient(180deg, rgba(10,15,35,0) 0%, rgba(10,15,35,0.85) 100%)",
                   }}
                 />
-                <div className="absolute inset-x-0 bottom-0 p-8 text-left">
-                  <span className="block h-[2px] w-8 bg-[#FF5A5A]" style={{ marginBottom: 24 }} />
-                  <div className="font-serif text-[28px] font-medium leading-[1.1] text-white">
+                <div className="absolute inset-x-0 bottom-0 p-7 text-left">
+                  <span className="block h-[2px] w-8 bg-[#FF5A5A]" style={{ marginBottom: 18 }} />
+                  <div className="font-serif text-[24px] font-medium leading-[1.1] text-white">
                     {r.label}
                   </div>
-                  <div className="mt-2.5 text-[14px] leading-[1.5] text-white/70">
+                  <div className="mt-2 text-[14px] leading-[1.5] text-white/70">
                     {r.blurb}
                   </div>
                 </div>
               </button>
             );
           })}
+
+          <div
+            className="absolute top-1/2 z-30 -translate-y-1/2"
+            style={{ right: `calc(50% + ${OFFSET + (ACTIVE_W * SIDE_SCALE) / 2 + 20}px)` }}
+          >
+            <CircleArrow dir="prev" onClick={prev} />
+          </div>
+          <div
+            className="absolute top-1/2 z-30 -translate-y-1/2"
+            style={{ left: `calc(50% + ${OFFSET + (ACTIVE_W * SIDE_SCALE) / 2 + 20}px)` }}
+          >
+            <CircleArrow dir="next" onClick={next} />
+          </div>
         </div>
 
-        <div className="mt-10 flex items-center justify-center gap-6">
-          <CircleArrow dir="prev" onClick={prev} />
-          <div className="flex items-center gap-2.5">
-            {REASONS.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                aria-label={`Go to reason ${i + 1}`}
-                onClick={() => setIdx(i)}
-                className="h-[7px] w-[7px] rounded-full transition-all"
-                style={{
-                  background: i === idx ? "#FF5A5A" : "rgba(255,255,255,0.35)",
-                  transform: i === idx ? "scale(1.25)" : "scale(1)",
-                }}
-              />
-            ))}
-          </div>
-          <CircleArrow dir="next" onClick={next} />
+        <div className="mt-4 flex items-center justify-center gap-2.5">
+          {REASONS.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Go to reason ${i + 1}`}
+              onClick={() => setIdx(i)}
+              className="h-[7px] w-[7px] rounded-full transition-all"
+              style={{
+                background: i === idx ? "#FF5A5A" : "rgba(255,255,255,0.35)",
+                transform: i === idx ? "scale(1.25)" : "scale(1)",
+              }}
+            />
+          ))}
         </div>
       </div>
     </section>

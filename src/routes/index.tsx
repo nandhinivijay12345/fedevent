@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { Nav } from "@/components/Nav";
 import { InvitationGate } from "@/components/InvitationGate";
+import { HeroCountdown } from "@/components/HeroCountdown";
 
 import { AnimatedSections } from "@/components/AnimatedSections";
 import { WhyFED } from "@/components/WhyFED";
@@ -70,7 +70,7 @@ function Hero() {
   return (
     <section data-hero className="relative flex h-screen w-full flex-col bg-white">
       <div className="mx-auto flex h-full w-full max-w-[1280px] flex-col px-8 pt-28 lg:pt-32">
-        <div className="grid flex-1 grid-cols-1 items-center gap-10 pb-8 lg:grid-cols-[42fr_58fr] lg:gap-14">
+        <div className="grid flex-1 grid-cols-1 items-center gap-10 pb-28 lg:grid-cols-[42fr_58fr] lg:gap-14 lg:pb-32">
           {/* LEFT — content */}
           <div className="relative flex flex-col justify-center">
             {/* Dotted globe motif */}
@@ -100,19 +100,11 @@ function Hero() {
               </div>
 
               <div className="fade-up mt-8 h-[2px] w-6 bg-[#D62828]" style={{ animationDelay: "180ms" }} />
-              <h1 className="mt-4 font-serif font-medium leading-[1.0] tracking-[-0.03em] text-[#1B2A5E]">
+              <h1 className="mt-4 font-serif font-medium leading-[1.08] tracking-[-0.03em] text-[#1B2A5E]">
                 <span className="line-mask block">
                   <span
-                    style={{ animationDelay: "220ms", fontSize: "clamp(2.75rem, 5.4vw, 4rem)" }}
+                    style={{ animationDelay: "220ms", fontSize: "clamp(2.5rem, 4.3vw, 3.5rem)" }}
                     className="block"
-                  >
-                    You're Invited<span className="italic text-[#D62828]">.</span>
-                  </span>
-                </span>
-                <span className="line-mask block">
-                  <span
-                    style={{ animationDelay: "380ms", fontSize: "clamp(1.375rem, 2.3vw, 2rem)" }}
-                    className="mt-5 block font-medium leading-[1.2]"
                   >
                     India's Largest International Education{" "}
                     <span className="italic text-[#D62828]">Summit.</span>
@@ -148,22 +140,23 @@ function Hero() {
               </div>
 
               <div className="fade-up mt-8" style={{ animationDelay: "900ms" }}>
-                <HeroInlineCountdown />
+                <HeroCountdown />
               </div>
             </div>
           </div>
 
           {/* RIGHT — contained image card */}
           <div className="relative flex items-center justify-center">
-            <div className="relative w-full" style={{ maxWidth: 520 }}>
+            <div className="relative w-full" style={{ maxWidth: 640 }}>
               <div
                 className="fade-up relative overflow-hidden rounded-[16px] shadow-[0_40px_80px_-40px_rgba(20,44,115,0.35)]"
-                style={{ animationDelay: "260ms", aspectRatio: "4 / 5", maxHeight: 520 }}
+                style={{ animationDelay: "260ms", aspectRatio: "6 / 5", maxHeight: 560 }}
               >
                 <img
                   src={hero}
                   alt="FED 2024 — Third Edition"
                   className="absolute inset-0 h-full w-full object-cover"
+                  style={{ objectPosition: "42% center" }}
                 />
               </div>
               {/* Attendee chip — overlaps bottom-left corner */}
@@ -187,58 +180,6 @@ function Hero() {
 
 
 
-
-function HeroInlineCountdown() {
-  const target = new Date("2026-08-24T09:00:00+05:30").getTime();
-  const [t, setT] = useState<{ d: number; h: number; m: number; s: number } | null>(null);
-  useEffect(() => {
-    setT(calcT(target));
-    const id = setInterval(() => setT(calcT(target)), 1000);
-    return () => clearInterval(id);
-  }, [target]);
-  const cells = [
-    { v: t?.d ?? 0, l: "Days" },
-    { v: t?.h ?? 0, l: "Hrs" },
-    { v: t?.m ?? 0, l: "Min" },
-    { v: t?.s ?? 0, l: "Sec" },
-  ];
-  return (
-    <div className="flex flex-wrap items-center gap-x-5 gap-y-3" suppressHydrationWarning>
-      <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#1B2A5E]/70">
-        <span className="inline-block h-[5px] w-[5px] rounded-full bg-[#D62828]" />
-        Doors open in
-      </div>
-      <div className="flex items-baseline gap-4" suppressHydrationWarning>
-        {cells.map((c, i) => (
-          <div key={c.l} className="flex items-baseline gap-4">
-            {i > 0 && <span className="h-5 w-px self-center bg-[#1B2A5E]/20" />}
-            <div className="flex items-baseline gap-1.5">
-              <span
-                className="font-serif text-[28px] font-medium leading-none tracking-[-0.02em] text-[#1B2A5E] tabular-nums"
-                suppressHydrationWarning
-              >
-                {t ? String(c.v).padStart(2, "0") : "––"}
-              </span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#1B2A5E]/55">
-                {c.l}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function calcT(target: number) {
-  const diff = Math.max(0, target - Date.now());
-  return {
-    d: Math.floor(diff / 86400000),
-    h: Math.floor((diff / 3600000) % 24),
-    m: Math.floor((diff / 60000) % 60),
-    s: Math.floor((diff / 1000) % 60),
-  };
-}
 
 
 
