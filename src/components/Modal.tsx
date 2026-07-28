@@ -115,6 +115,56 @@ export function LineField({
   );
 }
 
+export function PhoneField({
+  label,
+  required,
+  helper,
+  codeValue,
+  onCodeChange,
+  phoneValue,
+  onPhoneChange,
+}: {
+  label: string;
+  required?: boolean;
+  helper?: string;
+  codeValue: string;
+  onCodeChange: (v: string) => void;
+  phoneValue: string;
+  onPhoneChange: (v: string) => void;
+}) {
+  return (
+    <label className="block">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#1B2A5E]/70">
+        {label}{required && <span className="text-[#D62828]"> *</span>}
+      </span>
+      <div className="mt-2 flex items-baseline gap-3">
+        <input
+          type="text"
+          required={required}
+          placeholder="+91"
+          inputMode="tel"
+          aria-label="Country code"
+          value={codeValue}
+          onChange={(e) => onCodeChange(e.target.value)}
+          className="w-[52px] shrink-0 border-0 border-b border-[#1B2A5E]/20 bg-transparent px-0 py-2 text-[15px] text-[#1B2A5E] outline-none transition-colors placeholder:text-[#1B2A5E]/30 focus:border-[#1B2A5E] focus:ring-0"
+        />
+        <input
+          type="tel"
+          required={required}
+          inputMode="tel"
+          aria-label="Phone number"
+          value={phoneValue}
+          onChange={(e) => onPhoneChange(e.target.value)}
+          className="block w-full min-w-0 border-0 border-b border-[#1B2A5E]/20 bg-transparent px-0 py-2 text-[15px] text-[#1B2A5E] outline-none transition-colors placeholder:text-[#1B2A5E]/30 focus:border-[#1B2A5E] focus:ring-0"
+        />
+      </div>
+      {helper && (
+        <span className="mt-1.5 block text-[11px] text-[#1B2A5E]/50">{helper}</span>
+      )}
+    </label>
+  );
+}
+
 export function LineSelect({
   label,
   required,
@@ -259,6 +309,39 @@ export function SubmitPill({
     >
       {loading ? "Submitting…" : children}
     </button>
+  );
+}
+
+export function SegmentedToggle({
+  options,
+  value,
+  onChange,
+  className = "",
+}: {
+  options: { value: string; label: string }[];
+  value: string;
+  onChange: (v: string) => void;
+  className?: string;
+}) {
+  return (
+    <div role="tablist" className={`flex w-full flex-wrap gap-1 rounded-[20px] border border-[#1B2A5E]/12 bg-[#f7f8fa] p-1 ${className}`}>
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          role="tab"
+          aria-selected={value === o.value}
+          onClick={() => onChange(o.value)}
+          className={`min-w-[calc(50%-2px)] flex-1 rounded-2xl px-3 py-3.5 text-center text-[11.5px] font-semibold uppercase tracking-[0.09em] transition-all duration-200 xl:min-w-0 xl:whitespace-nowrap xl:rounded-full ${
+            value === o.value
+              ? "bg-[#1B2A5E] text-white shadow-[0_10px_24px_-10px_rgba(27,42,94,0.55)]"
+              : "text-[#1B2A5E]/55 hover:text-[#1B2A5E]"
+          }`}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
   );
 }
 

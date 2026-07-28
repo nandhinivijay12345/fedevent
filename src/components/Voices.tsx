@@ -16,10 +16,10 @@ const PANELISTS: Panelist[] = [
   { name: "Dr. Mohanalakshmi", title: "Founder", org: "American World School", image: p6 },
   { name: "Bill", title: "Managing Director", org: "Peter Jones Foundation", image: p11 },
   { name: "Dr. Margaret", title: "International Vice President", org: "WASC", image: p7 },
-  { name: "Dr. Madhan Karky", title: "Founder", org: "Karky Research Foundation", image: p12 },
-  { name: "Paul Montague", title: "International Director", org: "American World School", image: p9 },
+  { name: "Dr. Madhan Karky", title: "Founder", org: "KaReFo", image: p12 },
+  { name: "Paul Montague", title: "Chief Executive Officer", org: "Go Early College", image: p9 },
   { name: "Bhavanishankar", title: "Director", org: "Lalaji Memorial Omega International School", image: p8 },
-  { name: "Vimala Britto", title: "Curriculum Expert", org: "FEdy Curriculum", image: p10 },
+  { name: "Vimala Britto", title: "Curriculum Expert", org: "Fefdy Curriculum", image: p10 },
 ];
 
 

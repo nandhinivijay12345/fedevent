@@ -1,6 +1,6 @@
-import { ConfirmAttendanceFields, NominationFields } from "./FormFields";
+import { InstitutionAwardFields, NominationFields } from "./FormFields";
 import { Modal, ModalHeader, SuccessBlock } from "./Modal";
-import { useConfirmAttendanceForm } from "@/hooks/useConfirmAttendanceForm";
+import { useInstitutionAwardForm } from "@/hooks/useInstitutionAwardForm";
 import { useNominateForm } from "@/hooks/useNominateForm";
 
 export function ConfirmAttendanceModal({
@@ -10,7 +10,7 @@ export function ConfirmAttendanceModal({
   open: boolean;
   onClose: () => void;
 }) {
-  const form = useConfirmAttendanceForm();
+  const form = useInstitutionAwardForm("school");
 
   const handleClose = () => {
     onClose();
@@ -21,13 +21,13 @@ export function ConfirmAttendanceModal({
     <Modal open={open} onClose={handleClose} labelledBy="confirm-title">
       <ModalHeader
         id="confirm-title"
-        eyebrow="Confirm Attendance"
+        eyebrow="Awardee Registration"
         title="Reserve your seats for August 24."
       />
       {form.done ? (
         <SuccessBlock title="See you on August 24." />
       ) : (
-        <ConfirmAttendanceFields {...form} />
+        <InstitutionAwardFields track="school" {...form} />
       )}
     </Modal>
   );

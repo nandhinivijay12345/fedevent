@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ParticipateRouteImport } from './routes/participate'
 import { Route as NominateRouteImport } from './routes/nominate'
 import { Route as ConfirmRouteImport } from './routes/confirm'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ParticipateRoute = ParticipateRouteImport.update({
+  id: '/participate',
+  path: '/participate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NominateRoute = NominateRouteImport.update({
   id: '/nominate',
   path: '/nominate',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/confirm': typeof ConfirmRoute
   '/nominate': typeof NominateRoute
+  '/participate': typeof ParticipateRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/confirm': typeof ConfirmRoute
   '/nominate': typeof NominateRoute
+  '/participate': typeof ParticipateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/confirm': typeof ConfirmRoute
   '/nominate': typeof NominateRoute
+  '/participate': typeof ParticipateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/confirm' | '/nominate'
+  fullPaths: '/' | '/confirm' | '/nominate' | '/participate'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/confirm' | '/nominate'
-  id: '__root__' | '/' | '/confirm' | '/nominate'
+  to: '/' | '/confirm' | '/nominate' | '/participate'
+  id: '__root__' | '/' | '/confirm' | '/nominate' | '/participate'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ConfirmRoute: typeof ConfirmRoute
   NominateRoute: typeof NominateRoute
+  ParticipateRoute: typeof ParticipateRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/participate': {
+      id: '/participate'
+      path: '/participate'
+      fullPath: '/participate'
+      preLoaderRoute: typeof ParticipateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/nominate': {
       id: '/nominate'
       path: '/nominate'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConfirmRoute: ConfirmRoute,
   NominateRoute: NominateRoute,
+  ParticipateRoute: ParticipateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
