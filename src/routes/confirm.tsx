@@ -6,6 +6,7 @@ import { InstitutionAwardFields, IndividualAwardFields } from "@/components/Form
 import { useInstitutionAwardForm, type InstitutionTrack } from "@/hooks/useInstitutionAwardForm";
 import { useIndividualAwardForm } from "@/hooks/useIndividualAwardForm";
 import confirmStage from "@/assets/confirm-stage.jpg";
+import confirmStageCollage from "@/assets/confirm-stage-collage.png";
 
 type AwardTrack = "individual" | InstitutionTrack;
 
@@ -15,6 +16,15 @@ const TRACK_OPTIONS: { value: AwardTrack; label: string }[] = [
   { value: "organization", label: "Institute of Excellence Award" },
   { value: "college", label: "Higher Education Frontier Award" },
 ];
+
+const TRACK_DESCRIPTIONS: Record<AwardTrack, string> = {
+  individual:
+    "Recognising educators whose work quietly shapes classrooms, and the minds of young learners who carry it forward long after.",
+  school: "Honouring schools that build for what's next in curriculum, culture, and courage.",
+  organization:
+    "For organizations setting a standard others are still catching up to — proof that excellence is a practice, not a claim.",
+  college: "Celebrating the colleges and universities pushing higher education past its own edges.",
+};
 
 export const Route = createFileRoute("/confirm")({
   head: () => ({
@@ -46,78 +56,72 @@ function ConfirmPage() {
       <Nav />
       <main className="relative w-full bg-white">
         {/* ───── Awardee Registration hero ───── */}
-        <section className="relative w-full bg-white pt-28 pb-16 md:pt-32 md:pb-20">
-          <div className="mx-auto w-full max-w-[1280px] px-6 md:px-12 lg:px-20">
-            <Link
-              to="/"
-              className="fade-up inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#1B2A5E]/70 transition-colors hover:text-[#D62828]"
-              style={{ animationDelay: "40ms" }}
-            >
-              <span aria-hidden>←</span> Back to FED 2026
-            </Link>
-
-            <div className="fade-up mt-8" style={{ animationDelay: "120ms" }}>
-              <img
-                src={confirmStage}
-                alt="FED 2026 stage — panel chairs before the FED, WASC, and AIAASC backdrop"
-                className="h-[280px] w-full rounded-[24px] object-cover md:h-[420px] lg:h-[480px]"
-              />
-            </div>
-
-            <div className="mt-12">
-              <div className="fade-up text-[11px] font-semibold uppercase tracking-[0.24em] text-[#D62828]" style={{ animationDelay: "180ms" }}>
-                Awardee Registration · By Invitation Only
-              </div>
-
-              <h1
-                className="fade-up mt-4 font-serif font-medium leading-[1.05] tracking-[-0.02em] text-[#1B2A5E]"
-                style={{ fontSize: "clamp(2.75rem, 6vw, 4.5rem)", animationDelay: "240ms" }}
-              >
-                Reserve your seat
-                <br />
-                on the stage<span className="text-[#D62828]">.</span>
-              </h1>
-
-              <p className="fade-up mt-5 text-[18px] leading-[1.7] text-[#1B2A5E]/70" style={{ animationDelay: "320ms" }}>
-                A private registration for award nominees — individuals, schools, and colleges or universities. Once you're confirmed, our team will be in touch with arrival details and your on-stage moment.
-              </p>
-
-              <div
-                className="fade-up mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#1B2A5E]"
-                style={{ animationDelay: "380ms" }}
-              >
-                <span className="flex items-center gap-2">
-                  <span className="inline-block h-[5px] w-[5px] rounded-full bg-[#D62828]" />
-                  Edition 04
-                </span>
-                <span className="flex items-center gap-2">
-                  <span className="inline-block h-[5px] w-[5px] rounded-full bg-[#D62828]" />
-                  24 Aug 2026
-                </span>
-                <span className="flex items-center gap-2">
-                  <span className="inline-block h-[5px] w-[5px] rounded-full bg-[#D62828]" />
-                  IITM Research Park · Chennai
-                </span>
-              </div>
-
-              <p className="fade-up mt-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D62828]" style={{ animationDelay: "420ms" }}>
-                Registration and confirmation close August 20, 2026
-              </p>
-
-              <div className="fade-up mt-8" style={{ animationDelay: "480ms" }}>
-                <a
-                  href="#registration-form"
-                  className="inline-flex items-center justify-center rounded-full bg-[#D62828] px-8 py-4 font-sans text-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#b71f1f] hover:shadow-[0_18px_40px_-16px_rgba(214,40,40,0.6)]"
+        <section className="relative w-full bg-white pt-20 pb-16 md:pt-24 md:pb-20 lg:pb-0">
+          <div className="mx-auto flex w-full max-w-[1320px] flex-col px-6 md:px-10 lg:h-[85vh]">
+            <div className="grid grid-cols-1 gap-10 lg:h-full lg:grid-cols-[38fr_62fr] lg:items-center lg:gap-20">
+              {/* LEFT — text */}
+              <div className="flex flex-col justify-center">
+                <Link
+                  to="/"
+                  className="fade-up inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#1B2A5E]/70 transition-colors hover:text-[#D62828]"
+                  style={{ animationDelay: "40ms" }}
                 >
-                  Begin Registration
-                </a>
+                  <span aria-hidden>←</span> Back to FED 2026
+                </Link>
+
+                <div className="fade-up mt-8 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#D62828]" style={{ animationDelay: "120ms" }}>
+                  Awardee Registration · By Invitation Only
+                </div>
+
+                <h1
+                  className="fade-up mt-4 font-serif font-medium leading-[1.05] tracking-[-0.02em] text-[#1B2A5E]"
+                  style={{ fontSize: "clamp(2.5rem, 4.5vw, 4rem)", animationDelay: "180ms" }}
+                >
+                  Reserve Your Seat<span className="text-[#D62828]">.</span>
+                </h1>
+
+                <p className="fade-up mt-5 max-w-[460px] text-[18px] leading-[1.7] text-[#1B2A5E]/70" style={{ animationDelay: "240ms" }}>
+                  A private registration for award nominees — individuals, schools, organizations in education, and colleges or universities. Once you're confirmed, our team will be in touch with arrival details and your on-stage moment.
+                </p>
+
+                <div
+                  className="fade-up mt-8 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#1B2A5E]"
+                  style={{ animationDelay: "300ms" }}
+                >
+                  IITM Research Park Chennai | August 24 | 10AM Onwards
+                </div>
+
+                <p className="fade-up mt-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D62828]" style={{ animationDelay: "360ms" }}>
+                  Registration and confirmation close August 20, 2026
+                </p>
+
+                <div className="fade-up mt-7" style={{ animationDelay: "420ms" }}>
+                  <a
+                    href="#registration-form"
+                    className="inline-flex items-center justify-center rounded-full bg-[#D62828] px-8 py-4 text-[14px] font-semibold tracking-wide text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#b71f1f] hover:shadow-[0_18px_40px_-16px_rgba(214,40,40,0.6)]"
+                  >
+                    Begin Registration
+                  </a>
+                </div>
+              </div>
+
+              {/* RIGHT — photo */}
+              <div
+                className="fade-up relative aspect-[6/5] w-full overflow-hidden rounded-[16px]"
+                style={{ animationDelay: "160ms" }}
+              >
+                <img
+                  src={confirmStageCollage}
+                  alt="FED 2026 highlights — main stage, a student speaker, and awardee moments"
+                  className="absolute inset-0 h-full w-full object-contain"
+                />
               </div>
             </div>
           </div>
         </section>
 
         {/* ───── Registration form ───── */}
-        <section id="registration-form" className="relative w-full bg-white py-20 md:py-28">
+        <section id="registration-form" className="relative w-full overflow-hidden bg-white py-20 md:py-28">
           <div
             aria-hidden
             className="pointer-events-none absolute -right-[16%] top-[4%] h-[640px] w-[640px] opacity-[0.28]"
@@ -149,11 +153,25 @@ function ConfirmPage() {
               <span className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#D62828] via-[#D62828] to-[#F4EDDC]" />
 
               <div className="mx-auto max-w-[960px]">
+                {!done && (
+                  <div className="mb-12">
+                    <div className="flex items-center gap-3">
+                      <span className="h-[2px] w-6 bg-[#D62828]" />
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#1B2A5E]/70">
+                        {TRACK_OPTIONS.find((o) => o.value === track)?.label}
+                      </span>
+                    </div>
+                    <p className="mt-4 max-w-[640px] font-serif text-[19px] leading-[1.5] tracking-[-0.01em] text-[#1B2A5E]">
+                      {TRACK_DESCRIPTIONS[track]}
+                    </p>
+                    <div className="mt-8 h-px w-full bg-[#1B2A5E]/10" />
+                  </div>
+                )}
                 {track === "individual" ? (
                   individualForm.done ? (
                     <SuccessBlock
-                      title="See you on August 24."
-                      body="A confirmation will land in your inbox shortly. For any more questions, or concerns, please reach out to +91 82206 06367."
+                      title="See you on the stage!"
+                      body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
                     />
                   ) : (
                     <IndividualAwardFields {...individualForm} />
@@ -161,8 +179,8 @@ function ConfirmPage() {
                 ) : track === "school" ? (
                   schoolForm.done ? (
                     <SuccessBlock
-                      title="See you on August 24."
-                      body="A confirmation will land in your inbox shortly. For any more questions, or concerns, please reach out to +91 82206 06367."
+                      title="See you on the stage!"
+                      body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
                     />
                   ) : (
                     <InstitutionAwardFields track="school" {...schoolForm} />
@@ -170,16 +188,16 @@ function ConfirmPage() {
                 ) : track === "organization" ? (
                   organizationForm.done ? (
                     <SuccessBlock
-                      title="See you on August 24."
-                      body="A confirmation will land in your inbox shortly. For any more questions, or concerns, please reach out to +91 82206 06367."
+                      title="See you on the stage!"
+                      body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
                     />
                   ) : (
                     <InstitutionAwardFields track="organization" {...organizationForm} />
                   )
                 ) : collegeForm.done ? (
                   <SuccessBlock
-                    title="See you on August 24."
-                    body="A confirmation will land in your inbox shortly. For any more questions, or concerns, please reach out to +91 82206 06367."
+                    title="See you on the stage!"
+                    body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
                   />
                 ) : (
                   <InstitutionAwardFields track="college" {...collegeForm} />

@@ -15,7 +15,7 @@ const TRACK_COLUMNS: Record<
   InstitutionTrack,
   {
     entity_name: string;
-    category: string;
+    category?: string;
     type_field: string;
     type_field_other: string;
     total_strength: string;
@@ -34,7 +34,6 @@ const TRACK_COLUMNS: Record<
   },
   organization: {
     entity_name: "organization_name",
-    category: "industry",
     type_field: "organization_type",
     type_field_other: "organization_type_other",
     total_strength: "total_team_strength",
@@ -148,7 +147,7 @@ export function useInstitutionAwardForm(track: InstitutionTrack) {
     if (f.type_field === "Other" && !f.type_field_other.trim()) {
       return setError("Please specify.");
     }
-    if (!f.accreditations.trim()) {
+    if (track !== "organization" && !f.accreditations.trim()) {
       return setError("Please enter your accreditations or affiliations.");
     }
     if (!f.award_recipient_same_as_filler) {
@@ -189,7 +188,7 @@ export function useInstitutionAwardForm(track: InstitutionTrack) {
         [cols.entity_name]: f.entity_name,
         website: f.website,
         founding_year: parseInt(f.founding_year, 10),
-        [cols.category]: f.category,
+        ...(cols.category ? { [cols.category]: f.category } : {}),
         [cols.type_field]: f.type_field,
         [cols.type_field_other]: f.type_field === "Other" ? f.type_field_other.trim() : null,
         [cols.total_strength]: parseInt(f.total_strength, 10),

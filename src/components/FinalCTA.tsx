@@ -68,10 +68,10 @@ export function FinalCTA() {
                       to="/confirm"
                       className="inline-flex w-full items-center justify-center rounded-full bg-[#D62828] px-7 py-3.5 text-[14px] font-semibold text-white transition hover:bg-[#b71f1f] sm:w-auto"
                     >
-                      Confirm Your Attendance
+                      Awardee Registration
                     </Link>
                     <a
-                      href="https://www.kidspreneur.org"
+                      href="https://www.kidspreneur.org/global-flash-challenge"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex w-full items-center justify-center rounded-full bg-white px-7 py-3.5 text-[14px] font-semibold text-[#141F45] transition hover:bg-white/90 sm:w-auto"

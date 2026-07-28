@@ -11,7 +11,6 @@ export const BOARD_AFFILIATIONS = ["CBSE", "ICSE", "IB", "State Board", "Interna
 export const SCHOOL_TYPES = ["K-12 (Full)", "K-5 / Primary Only", "6-12 / Secondary Only", "Pre-K Only", "Other"];
 export const INDIVIDUAL_ROLES = ["Educator", "Entrepreneur", "Policy Maker", "Innovator", "Researcher", "Student", "Other"];
 export const VISITOR_TYPES = ["Parent / Guardian", "Student", "Educator", "Industry Professional", "Media", "General Public", "Other"];
-export const INDUSTRY_SECTORS = ["Technology", "Education", "Healthcare", "Finance", "Manufacturing", "NGO / Non-Profit", "Government", "Other"];
 export const ORGANIZATION_TYPES = ["Corporate", "Startup", "NGO / Non-Profit", "Government / PSU", "Other"];
 export const UNIVERSITY_AFFILIATIONS = ["Autonomous", "State University", "Central University", "Deemed University", "Private University", "Other"];
 export const INSTITUTION_TYPES = ["Engineering & Technology", "Arts & Science", "Medical", "Management", "Multi-Disciplinary", "Other"];
@@ -19,8 +18,8 @@ export const INSTITUTION_TYPES = ["Engineering & Technology", "Arts & Science", 
 type InstitutionCopy = {
   profileLabel: string;
   entityLabel: string;
-  categoryLabel: string;
-  categoryOptions: string[];
+  categoryLabel?: string;
+  categoryOptions?: string[];
   typeLabel: string;
   typeOptions: string[];
   strengthLabel: string;
@@ -59,8 +58,6 @@ export const INSTITUTION_COPY: Record<InstitutionTrack, InstitutionCopy> = {
   organization: {
     profileLabel: "Organization Profile",
     entityLabel: "Organization Name",
-    categoryLabel: "Industry / Sector",
-    categoryOptions: INDUSTRY_SECTORS,
     typeLabel: "Organization Type",
     typeOptions: ORGANIZATION_TYPES,
     strengthLabel: "Total Team Strength",
@@ -246,14 +243,16 @@ export function InstitutionAwardFields({
               onChange={(v) => set("total_strength", v.replace(/\D/g, ""))}
             />
           </div>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <LineSelect
-              label={copy.categoryLabel}
-              required
-              value={f.category}
-              onChange={(v) => set("category", v)}
-              options={copy.categoryOptions}
-            />
+          <div className={`grid grid-cols-1 gap-8 ${copy.categoryLabel ? "md:grid-cols-2" : ""}`}>
+            {copy.categoryLabel && copy.categoryOptions && (
+              <LineSelect
+                label={copy.categoryLabel}
+                required
+                value={f.category}
+                onChange={(v) => set("category", v)}
+                options={copy.categoryOptions}
+              />
+            )}
             <LineSelect
               label={copy.typeLabel}
               required
@@ -271,15 +270,17 @@ export function InstitutionAwardFields({
               onChange={(v) => set("type_field_other", v)}
             />
           )}
-          <TextAreaField
-            label="Accreditations or Affiliations Held"
-            required
-            maxLength={150}
-            rows={3}
-            placeholder={copy.accreditationsPlaceholder}
-            value={f.accreditations}
-            onChange={(v) => set("accreditations", v)}
-          />
+          {track !== "organization" && (
+            <TextAreaField
+              label="Accreditations or Affiliations Held"
+              required
+              maxLength={150}
+              rows={3}
+              placeholder={copy.accreditationsPlaceholder}
+              value={f.accreditations}
+              onChange={(v) => set("accreditations", v)}
+            />
+          )}
           <TextAreaField
             label="Vision"
             required

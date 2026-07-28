@@ -148,9 +148,9 @@ export function WhyFED() {
       id="why-fed"
       ref={sectionRef}
       
-      className="relative h-screen w-full overflow-hidden bg-white"
+      className="relative min-h-screen w-full overflow-hidden bg-white md:h-screen"
     >
-      <div className="mx-auto grid h-full max-w-[1280px] grid-cols-1 items-center gap-0 px-8 pt-[88px] pb-10 md:grid-cols-[52fr_48fr]">
+      <div className="mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-0 px-8 pt-[88px] pb-10 md:h-full md:grid-cols-[52fr_48fr]">
         {/* LEFT — image (crossfade) */}
         <div className="relative h-[300px] w-full overflow-hidden rounded-[20px] shadow-[0_40px_80px_-40px_rgba(20,44,115,0.35)] md:h-[78vh]">
           {SLIDES.map((sl, idx) => (
@@ -169,7 +169,7 @@ export function WhyFED() {
         </div>
 
         {/* RIGHT — text */}
-        <div className="relative flex h-full flex-col justify-center px-2 md:px-14">
+        <div className="relative flex flex-col px-2 py-8 md:h-full md:justify-center md:px-14 md:py-0">
           <div key={i} style={{ animation: "whyfade 600ms ease-out" }}>
             <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#D62828]">
               Why FED
@@ -184,7 +184,7 @@ export function WhyFED() {
           </div>
 
           {/* Manual nav + Progress rail */}
-          <div className="absolute bottom-8 left-2 right-2 flex items-center gap-4 md:left-14 md:right-14">
+          <div className="mt-10 flex items-center gap-4 md:absolute md:bottom-8 md:left-14 md:right-14 md:mt-0">
             <button
               type="button"
               onClick={() => {
@@ -195,7 +195,7 @@ export function WhyFED() {
               }}
               disabled={i === 0}
               aria-label="Previous chapter"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#1B2A5E]/20 text-[#1B2A5E] transition hover:border-[#D62828] hover:text-[#D62828] disabled:opacity-30 disabled:hover:border-[#1B2A5E]/20 disabled:hover:text-[#1B2A5E]"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#1B2A5E]/20 text-[#1B2A5E] transition hover:border-[#D62828] hover:text-[#D62828] disabled:opacity-30 disabled:hover:border-[#1B2A5E]/20 disabled:hover:text-[#1B2A5E]"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
@@ -209,7 +209,7 @@ export function WhyFED() {
               }}
               disabled={i === SLIDES.length - 1}
               aria-label="Next chapter"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#1B2A5E]/20 text-[#1B2A5E] transition hover:border-[#D62828] hover:text-[#D62828] disabled:opacity-30 disabled:hover:border-[#1B2A5E]/20 disabled:hover:text-[#1B2A5E]"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#1B2A5E]/20 text-[#1B2A5E] transition hover:border-[#D62828] hover:text-[#D62828] disabled:opacity-30 disabled:hover:border-[#1B2A5E]/20 disabled:hover:text-[#1B2A5E]"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 6l6 6-6 6"/></svg>
             </button>

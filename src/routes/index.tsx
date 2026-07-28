@@ -120,21 +120,21 @@ function Hero() {
               </p>
 
               <div
-                className="fade-up mt-9 flex flex-wrap items-center gap-6"
+                className="fade-up mt-9 flex flex-col items-stretch gap-5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6"
                 style={{ animationDelay: "780ms" }}
               >
                 <Link
-                  to="/participate"
-                  className="inline-flex items-center justify-center rounded-full bg-[#D62828] px-8 py-4 text-[14px] font-semibold tracking-wide text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#b71f1f] hover:shadow-[0_18px_40px_-16px_rgba(214,40,40,0.6)]"
+                  to="/confirm"
+                  className="inline-flex w-full items-center justify-center rounded-full bg-[#D62828] px-8 py-4 text-[14px] font-semibold tracking-wide text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#b71f1f] hover:shadow-[0_18px_40px_-16px_rgba(214,40,40,0.6)] sm:w-auto"
                 >
-                  Attendee Registration
+                  Awardee Registration
                 </Link>
 
                 <Link
-                  to="/confirm"
-                  className="group inline-flex items-center gap-2 text-[14px] font-semibold tracking-wide text-[#1B2A5E]"
+                  to="/participate"
+                  className="group inline-flex items-center justify-center gap-2 text-[14px] font-semibold tracking-wide text-[#1B2A5E] sm:justify-start"
                 >
-                  Awardee Registration
+                  Attendee Registration
                   <span aria-hidden className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </Link>
               </div>

@@ -29,8 +29,8 @@ function ParticipatePage() {
       >
         {form.done ? (
           <SuccessBlock
-            title="You're on the list."
-            body="A confirmation will land in your inbox within one working day."
+            title="See you on the stage!"
+            body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
           />
         ) : (
           <ParticipationFields {...form} />

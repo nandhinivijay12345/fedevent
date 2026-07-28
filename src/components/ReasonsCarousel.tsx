@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import orbit1 from "@/assets/orbit1.jpg";
+import globalRecognition from "@/assets/global-recognition.jpg";
 import orbit3 from "@/assets/orbit3.jpg";
 import orbit4 from "@/assets/orbit4.jpg";
 import futureTrends from "@/assets/future-trends.jpg";
@@ -10,7 +10,7 @@ import bgImg from "@/assets/orbit-bg.jpg";
 type Reason = { label: string; blurb: string; image: string };
 
 const REASONS: Reason[] = [
-  { label: "Global Recognition", blurb: "A stage that earns you a place in the conversation.", image: orbit1 },
+  { label: "Global Recognition", blurb: "A stage that earns you a place in the conversation.", image: globalRecognition },
   { label: "Best Practices",     blurb: "Frameworks other schools are quietly adopting.",       image: orbit6 },
   { label: "Expert Speakers",    blurb: "Educators who built what everyone else discusses.",    image: orbit3 },
   { label: "School Networking",  blurb: "The partnerships that outlast the day itself.",        image: orbit4 },
@@ -31,7 +31,11 @@ const NON_CARD_HEIGHT = 249;
 const DEFAULT_ACTIVE_H = 620;
 
 function computeActiveH() {
-  return Math.max(320, Math.min(680, window.innerHeight - NON_CARD_HEIGHT));
+  const byHeight = window.innerHeight - NON_CARD_HEIGHT;
+  // Cap by width too, so the active card (plus its peeking neighbours)
+  // never pushes past the viewport edges on narrow screens.
+  const byWidth = (window.innerWidth - 64) / CARD_ASPECT;
+  return Math.max(280, Math.min(680, byHeight, byWidth));
 }
 
 export function ReasonsCarousel() {
@@ -186,13 +190,13 @@ export function ReasonsCarousel() {
           })}
 
           <div
-            className="absolute top-1/2 z-30 -translate-y-1/2"
+            className="absolute top-1/2 z-30 hidden -translate-y-1/2 md:block"
             style={{ right: `calc(50% + ${OFFSET + (ACTIVE_W * SIDE_SCALE) / 2 + 20}px)` }}
           >
             <CircleArrow dir="prev" onClick={prev} />
           </div>
           <div
-            className="absolute top-1/2 z-30 -translate-y-1/2"
+            className="absolute top-1/2 z-30 hidden -translate-y-1/2 md:block"
             style={{ left: `calc(50% + ${OFFSET + (ACTIVE_W * SIDE_SCALE) / 2 + 20}px)` }}
           >
             <CircleArrow dir="next" onClick={next} />

@@ -1,4 +1,6 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
+import { fireConfetti } from "@/lib/confetti";
 
 export function Modal({
   open,
@@ -41,7 +43,7 @@ export function Modal({
         <button
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full text-[#1B2A5E] hover:bg-[#1B2A5E]/5"
+          className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full text-[#1B2A5E] hover:bg-[#1B2A5E]/5"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -273,7 +275,7 @@ export function Stepper({
           type="button"
           onClick={() => set(value - 1)}
           aria-label="Decrease"
-          className="flex h-8 w-8 items-center justify-center rounded-full text-[#1B2A5E] hover:bg-[#1B2A5E]/5"
+          className="flex h-11 w-11 items-center justify-center rounded-full text-[#1B2A5E] hover:bg-[#1B2A5E]/5"
         >−</button>
         <input
           type="number"
@@ -287,7 +289,7 @@ export function Stepper({
           type="button"
           onClick={() => set(value + 1)}
           aria-label="Increase"
-          className="flex h-8 w-8 items-center justify-center rounded-full text-[#1B2A5E] hover:bg-[#1B2A5E]/5"
+          className="flex h-11 w-11 items-center justify-center rounded-full text-[#1B2A5E] hover:bg-[#1B2A5E]/5"
         >+</button>
       </div>
     </div>
@@ -324,7 +326,10 @@ export function SegmentedToggle({
   className?: string;
 }) {
   return (
-    <div role="tablist" className={`flex w-full flex-wrap gap-1 rounded-[20px] border border-[#1B2A5E]/12 bg-[#f7f8fa] p-1 ${className}`}>
+    <div
+      role="tablist"
+      className={`flex w-full snap-x snap-mandatory gap-1.5 overflow-x-auto rounded-[20px] border border-[#1B2A5E]/12 bg-[#f7f8fa] p-1.5 [-ms-overflow-style:none] [scrollbar-width:none] xl:gap-1 xl:overflow-visible xl:p-1 [&::-webkit-scrollbar]:hidden ${className}`}
+    >
       {options.map((o) => (
         <button
           key={o.value}
@@ -332,7 +337,7 @@ export function SegmentedToggle({
           role="tab"
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
-          className={`min-w-[calc(50%-2px)] flex-1 rounded-2xl px-3 py-3.5 text-center text-[11.5px] font-semibold uppercase tracking-[0.09em] transition-all duration-200 xl:min-w-0 xl:whitespace-nowrap xl:rounded-full ${
+          className={`shrink-0 snap-start whitespace-nowrap rounded-2xl px-4 py-3.5 text-center text-[11.5px] font-semibold uppercase tracking-[0.09em] transition-all duration-200 xl:flex-1 xl:rounded-full ${
             value === o.value
               ? "bg-[#1B2A5E] text-white shadow-[0_10px_24px_-10px_rgba(27,42,94,0.55)]"
               : "text-[#1B2A5E]/55 hover:text-[#1B2A5E]"
@@ -376,15 +381,44 @@ export function SuccessBlock({
   title: string;
   body?: string;
 }) {
+  const [open, setOpen] = useState(true);
+
+  useEffect(() => {
+    fireConfetti();
+  }, []);
+
   return (
-    <div className="py-6">
-      <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#D62828]" />
-      <p className="mt-5 font-serif text-[24px] md:text-[28px] leading-[1.2] tracking-[-0.02em] text-[#1B2A5E]">
-        {title}
-      </p>
-      {body && (
-        <p className="mt-4 text-[14px] leading-[1.6] text-[#1B2A5E]/70">{body}</p>
-      )}
-    </div>
+    <>
+      <Modal open={open} onClose={() => setOpen(false)} labelledBy="success-title">
+        <div className="py-4 text-center">
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#D62828]" />
+          <p
+            id="success-title"
+            className="mt-5 font-serif text-[24px] md:text-[28px] leading-[1.2] tracking-[-0.02em] text-[#1B2A5E]"
+          >
+            {title}
+          </p>
+          {body && (
+            <p className="mt-4 text-[14px] leading-[1.6] text-[#1B2A5E]/70">{body}</p>
+          )}
+        </div>
+      </Modal>
+
+      <div className="py-6 text-center">
+        <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#D62828]" />
+        <p className="mt-5 font-serif text-[24px] md:text-[28px] leading-[1.2] tracking-[-0.02em] text-[#1B2A5E]">
+          We can't wait to see you!
+        </p>
+        <p className="mt-4 text-[14px] leading-[1.6] text-[#1B2A5E]/70">
+          While you wait, take a look at what's coming at FED 2026 — the stage, the speakers, and everything else we've been building.
+        </p>
+        <Link
+          to="/"
+          className="mt-6 inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#D62828] transition-colors hover:text-[#b71f1f]"
+        >
+          Explore FED 2026 <span aria-hidden>→</span>
+        </Link>
+      </div>
+    </>
   );
 }
