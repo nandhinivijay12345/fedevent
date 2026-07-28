@@ -22,7 +22,6 @@ export type Database = {
           award_recipient_name: string
           award_recipient_phone: string
           board_affiliation: string
-          confirmation_code: string
           created_at: string
           designation: string
           email: string
@@ -35,10 +34,10 @@ export type Database = {
           school_type_other: string | null
           signature_url: string | null
           staff_passes: number
-          standout_milestone: string
           student_passes: number
           total_student_strength: number
           vision: string
+          website: string | null
           your_name: string
         }
         Insert: {
@@ -48,7 +47,6 @@ export type Database = {
           award_recipient_name: string
           award_recipient_phone: string
           board_affiliation: string
-          confirmation_code: string
           created_at?: string
           designation: string
           email: string
@@ -61,10 +59,10 @@ export type Database = {
           school_type_other?: string | null
           signature_url?: string | null
           staff_passes: number
-          standout_milestone: string
           student_passes: number
           total_student_strength: number
           vision: string
+          website?: string | null
           your_name: string
         }
         Update: {
@@ -74,7 +72,6 @@ export type Database = {
           award_recipient_name?: string
           award_recipient_phone?: string
           board_affiliation?: string
-          confirmation_code?: string
           created_at?: string
           designation?: string
           email?: string
@@ -87,10 +84,52 @@ export type Database = {
           school_type_other?: string | null
           signature_url?: string | null
           staff_passes?: number
-          standout_milestone?: string
           student_passes?: number
           total_student_strength?: number
           vision?: string
+          website?: string | null
+          your_name?: string
+        }
+        Relationships: []
+      }
+      individual_award_registrations: {
+        Row: {
+          authorised: boolean
+          bio: string
+          created_at: string
+          email: string
+          guest_passes: number
+          id: string
+          organisation: string | null
+          phone: string
+          role: string
+          signature_url: string | null
+          your_name: string
+        }
+        Insert: {
+          authorised?: boolean
+          bio: string
+          created_at?: string
+          email: string
+          guest_passes: number
+          id?: string
+          organisation?: string | null
+          phone: string
+          role: string
+          signature_url?: string | null
+          your_name: string
+        }
+        Update: {
+          authorised?: boolean
+          bio?: string
+          created_at?: string
+          email?: string
+          guest_passes?: number
+          id?: string
+          organisation?: string | null
+          phone?: string
+          role?: string
+          signature_url?: string | null
           your_name?: string
         }
         Relationships: []
@@ -133,6 +172,207 @@ export type Database = {
           phone?: string | null
           reason?: string
           school_name?: string
+          your_name?: string
+        }
+        Relationships: []
+      }
+      participations: {
+        Row: {
+          city: string
+          created_at: string
+          email: string
+          full_name: string
+          guest_count: number
+          id: string
+          note: string | null
+          organisation: string | null
+          phone: string
+          updates_opt_in: boolean
+          visitor_type: string
+          visitor_type_other: string | null
+        }
+        Insert: {
+          city: string
+          created_at?: string
+          email: string
+          full_name: string
+          guest_count?: number
+          id?: string
+          note?: string | null
+          organisation?: string | null
+          phone: string
+          updates_opt_in?: boolean
+          visitor_type: string
+          visitor_type_other?: string | null
+        }
+        Update: {
+          city?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          guest_count?: number
+          id?: string
+          note?: string | null
+          organisation?: string | null
+          phone?: string
+          updates_opt_in?: boolean
+          visitor_type?: string
+          visitor_type_other?: string | null
+        }
+        Relationships: []
+      }
+      organization_award_registrations: {
+        Row: {
+          accreditations: string | null
+          authorised: boolean
+          award_recipient_designation: string
+          award_recipient_name: string
+          award_recipient_phone: string
+          created_at: string
+          designation: string
+          email: string
+          founding_year: number
+          guest_passes: number
+          id: string
+          industry: string
+          mission: string
+          organization_name: string
+          organization_type: string
+          organization_type_other: string | null
+          phone: string
+          signature_url: string | null
+          team_passes: number
+          total_team_strength: number
+          vision: string
+          website: string | null
+          your_name: string
+        }
+        Insert: {
+          accreditations?: string | null
+          authorised?: boolean
+          award_recipient_designation: string
+          award_recipient_name: string
+          award_recipient_phone: string
+          created_at?: string
+          designation: string
+          email: string
+          founding_year: number
+          guest_passes: number
+          id?: string
+          industry: string
+          mission: string
+          organization_name: string
+          organization_type: string
+          organization_type_other?: string | null
+          phone: string
+          signature_url?: string | null
+          team_passes: number
+          total_team_strength: number
+          vision: string
+          website?: string | null
+          your_name: string
+        }
+        Update: {
+          accreditations?: string | null
+          authorised?: boolean
+          award_recipient_designation?: string
+          award_recipient_name?: string
+          award_recipient_phone?: string
+          created_at?: string
+          designation?: string
+          email?: string
+          founding_year?: number
+          guest_passes?: number
+          id?: string
+          industry?: string
+          mission?: string
+          organization_name?: string
+          organization_type?: string
+          organization_type_other?: string | null
+          phone?: string
+          signature_url?: string | null
+          team_passes?: number
+          total_team_strength?: number
+          vision?: string
+          website?: string | null
+          your_name?: string
+        }
+        Relationships: []
+      }
+      college_award_registrations: {
+        Row: {
+          accreditations: string | null
+          affiliation: string
+          authorised: boolean
+          award_recipient_designation: string
+          award_recipient_name: string
+          award_recipient_phone: string
+          created_at: string
+          designation: string
+          email: string
+          founding_year: number
+          id: string
+          institution_name: string
+          institution_type: string
+          institution_type_other: string | null
+          mission: string
+          phone: string
+          signature_url: string | null
+          staff_passes: number
+          student_passes: number
+          total_student_strength: number
+          vision: string
+          website: string | null
+          your_name: string
+        }
+        Insert: {
+          accreditations?: string | null
+          affiliation: string
+          authorised?: boolean
+          award_recipient_designation: string
+          award_recipient_name: string
+          award_recipient_phone: string
+          created_at?: string
+          designation: string
+          email: string
+          founding_year: number
+          id?: string
+          institution_name: string
+          institution_type: string
+          institution_type_other?: string | null
+          mission: string
+          phone: string
+          signature_url?: string | null
+          staff_passes: number
+          student_passes: number
+          total_student_strength: number
+          vision: string
+          website?: string | null
+          your_name: string
+        }
+        Update: {
+          accreditations?: string | null
+          affiliation?: string
+          authorised?: boolean
+          award_recipient_designation?: string
+          award_recipient_name?: string
+          award_recipient_phone?: string
+          created_at?: string
+          designation?: string
+          email?: string
+          founding_year?: number
+          id?: string
+          institution_name?: string
+          institution_type?: string
+          institution_type_other?: string | null
+          mission?: string
+          phone?: string
+          signature_url?: string | null
+          staff_passes?: number
+          student_passes?: number
+          total_student_strength?: number
+          vision?: string
+          website?: string | null
           your_name?: string
         }
         Relationships: []

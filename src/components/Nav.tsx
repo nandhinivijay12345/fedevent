@@ -12,11 +12,10 @@ const items = [
 ];
 
 
-
-
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -43,63 +42,102 @@ export function Nav() {
     return () => io.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (hidden) setOpen(false);
+  }, [hidden]);
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-30 bg-white border-b border-line transition-transform duration-500 ${
+      className={`fixed inset-x-0 top-0 z-30 border-b bg-white/95 backdrop-blur transition-[transform,opacity,box-shadow,border-color] duration-500 ${
         hidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
-      }`}
+      } ${scrolled ? "border-line shadow-[0_1px_0_rgba(20,44,115,0.06)]" : "border-transparent"}`}
     >
-
-      <div className="relative mx-auto flex h-[72px] max-w-[1280px] items-center justify-between gap-6 px-8">
-        <a href="/#top" className="flex items-center" aria-label="Future of Education 2026">
-          <img src={logo} alt="Future of Education 2026" className="h-10 w-auto md:h-12" />
+      <div className="mx-auto grid h-[76px] max-w-[1320px] grid-cols-[1fr_auto_1fr] items-center gap-6 px-6 md:px-10">
+        <a href="/#top" className="flex shrink-0 items-center justify-self-start" aria-label="Future of Education 2026">
+          <img src={logo} alt="Future of Education 2026" className="h-10 w-auto md:h-11" />
         </a>
 
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
-          {items.map((i) =>
-            i.label === "Awards" ? (
-              <div key={i.label} className="group relative">
-                <a
-                  href={i.href}
-                  className="inline-flex items-center gap-1 text-[13px] font-medium text-navy/80 transition-colors hover:text-navy"
-                >
-                  {i.label}
-                  <svg width="9" height="6" viewBox="0 0 9 6" className="opacity-60">
-                    <path d="M1 1l3.5 3.5L8 1" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" />
-                  </svg>
-                </a>
-                <div className="invisible absolute left-1/2 top-full z-20 mt-3 -translate-x-1/2 whitespace-nowrap rounded-md border border-line bg-white p-2 opacity-0 shadow-[0_20px_40px_-18px_rgba(20,44,115,0.25)] transition-all duration-150 group-hover:visible group-hover:opacity-100">
-                  <a href="/#awards" className="block rounded px-4 py-2 text-[13px] text-navy/80 hover:bg-[#f7f8fa] hover:text-navy">Top 100 Schools</a>
-                  <Link
-                    to="/nominate"
-                    className="block w-full rounded px-4 py-2 text-left text-[13px] text-navy/80 hover:bg-[#f7f8fa] hover:text-navy"
-                  >
-                    Nominate Your School
-                  </Link>
-
-                </div>
-              </div>
-            ) : (
-              <a
-                key={i.label}
-                href={i.href}
-                className="text-[13px] font-medium text-navy/80 transition-colors hover:text-navy"
-              >
-                {i.label}
-              </a>
-            ),
-          )}
+        <nav className="hidden items-center justify-self-center gap-7 xl:flex xl:gap-8">
+          {items.map((i) => (
+            <a
+              key={i.label}
+              href={i.href}
+              className="group relative py-2 text-[13px] font-medium tracking-wide text-navy/70 transition-colors hover:text-navy"
+            >
+              {i.label}
+              <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-red transition-transform duration-300 ease-out group-hover:scale-x-100" />
+            </a>
+          ))}
         </nav>
 
-        <Link
-          to="/confirm"
-          className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#D62828] px-5 py-2.5 text-[13px] font-medium tracking-wide text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#b71f1f] hover:shadow-[0_10px_30px_-12px_rgba(214,40,40,0.55)]"
-        >
-          Confirm Attendance
-        </Link>
+        <div className="flex shrink-0 items-center justify-self-end gap-6">
+          <Link
+            to="/participate"
+            className="group relative hidden whitespace-nowrap py-2 text-[13px] font-medium tracking-wide text-navy/70 transition-colors hover:text-navy sm:inline-flex"
+          >
+            Attendee Registration
+            <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-red transition-transform duration-300 ease-out group-hover:scale-x-100" />
+          </Link>
+          <Link
+            to="/confirm"
+            className="hidden items-center whitespace-nowrap rounded-full bg-red px-5 py-2.5 text-[12.5px] font-medium tracking-wide text-white transition-all duration-300 hover:scale-[1.02] hover:bg-red-deep hover:shadow-[0_10px_30px_-12px_rgba(229,57,53,0.55)] sm:inline-flex"
+          >
+            Awardee Registration
+          </Link>
 
+          <button
+            type="button"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-navy transition-colors hover:bg-navy/5 xl:hidden"
+          >
+            {open ? (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg width="18" height="13" viewBox="0 0 18 13" fill="none">
+                <path d="M0 1h18M0 6.5h18M0 12h18" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
 
+      <div
+        className={`overflow-hidden border-t border-line bg-white transition-[max-height,opacity] duration-300 ease-out xl:hidden ${
+          open ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <nav className="flex flex-col px-6 py-4">
+          {items.map((i) => (
+            <a
+              key={i.label}
+              href={i.href}
+              onClick={() => setOpen(false)}
+              className="border-b border-line py-3.5 text-[14px] font-medium text-navy/80 last:border-b-0"
+            >
+              {i.label}
+            </a>
+          ))}
+        </nav>
+        <div className="flex flex-col gap-3 px-6 pb-6 pt-2">
+          <Link
+            to="/participate"
+            onClick={() => setOpen(false)}
+            className="inline-flex items-center justify-center rounded-full border border-navy/15 px-5 py-3 text-[13px] font-medium tracking-wide text-navy/80"
+          >
+            Attendee Registration
+          </Link>
+          <Link
+            to="/confirm"
+            onClick={() => setOpen(false)}
+            className="inline-flex items-center justify-center rounded-full bg-red px-5 py-3 text-[13px] font-medium tracking-wide text-white"
+          >
+            Awardee Registration
+          </Link>
+        </div>
       </div>
     </header>
   );

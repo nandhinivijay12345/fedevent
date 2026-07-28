@@ -8,6 +8,7 @@ export type NominateFormState = {
   your_name: string;
   designation: string;
   email: string;
+  phone_country_code: string;
   phone: string;
   reason: string;
   link: string;
@@ -21,6 +22,7 @@ export function useNominateForm() {
     your_name: "",
     designation: "",
     email: "",
+    phone_country_code: "+91",
     phone: "",
     reason: "",
     link: "",
@@ -50,7 +52,7 @@ export function useNominateForm() {
         your_name: f.your_name,
         designation: f.designation,
         email: f.email,
-        phone: f.phone || null,
+        phone: f.phone.trim() ? `${f.phone_country_code.trim()} ${f.phone.trim()}`.trim() : null,
         reason: f.reason,
         link: f.link || null,
         authorised: f.authorised,
