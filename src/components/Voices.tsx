@@ -48,7 +48,7 @@ export function Voices() {
         </div>
 
         {/* Portrait grid — images rendered as-is */}
-        <div className="mt-14 grid grid-cols-2 gap-x-8 gap-y-14 sm:grid-cols-3 lg:grid-cols-4 items-start justify-items-center">
+        <div className="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-3 lg:grid-cols-4 items-start justify-items-center">
           {PANELISTS.map((p, i) => (
             <button
               key={i}
@@ -58,8 +58,8 @@ export function Voices() {
             >
               {p.image ? (
                 <div
-                  className="relative overflow-hidden rounded-full shadow-[0_10px_30px_-15px_rgba(27,42,94,0.25)] transition-transform duration-300 group-hover:scale-[1.04]"
-                  style={{ width: 260, aspectRatio: "1 / 1", borderRadius: "9999px" }}
+                  className="relative w-[200px] sm:w-[220px] lg:w-[260px] overflow-hidden rounded-full shadow-[0_10px_30px_-15px_rgba(27,42,94,0.25)] transition-transform duration-300 group-hover:scale-[1.04]"
+                  style={{ aspectRatio: "1 / 1", borderRadius: "9999px" }}
                 >
                   <img
                     src={p.image}
@@ -70,8 +70,8 @@ export function Voices() {
                 </div>
               ) : (
                 <div
-                  className="flex items-center justify-center bg-[#1B2A5E] rounded-full transition-transform duration-300 group-hover:scale-[1.04]"
-                  style={{ width: 260, aspectRatio: "1 / 1", borderRadius: "9999px" }}
+                  className="flex w-[200px] sm:w-[220px] lg:w-[260px] items-center justify-center bg-[#1B2A5E] rounded-full transition-transform duration-300 group-hover:scale-[1.04]"
+                  style={{ aspectRatio: "1 / 1", borderRadius: "9999px" }}
                 >
                   <span className="font-serif text-[56px] text-white">{initials(p.name)}</span>
                 </div>
