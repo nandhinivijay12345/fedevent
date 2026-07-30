@@ -29,7 +29,8 @@ const SLIDES: Slide[] = [
   },
   {
     word: "Pitch",
-    line1: "The India Challenge, hosted by Kidspreneur, the Peter Jones Foundation, and American World School is now live.",
+    line1:
+      "The India Challenge, hosted by Kidspreneur, the Peter Jones Foundation, and American World School is now live.",
     line2: "Student founders from around the world take the mic.",
     image: slide3,
     cta: { label: "Curious? Find Out More.", href: "https://www.kidspreneur.org" },
@@ -48,7 +49,9 @@ const SLIDES: Slide[] = [
   },
 ];
 
-const LOCK_MS = 950;
+const LOCK_MS = 700;
+const ENTRY_LOCK_MS = 950;
+const WHEEL_THRESHOLD = 24;
 
 export function AnimatedSections() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -57,6 +60,10 @@ export function AnimatedSections() {
   const lockedRef = useRef(false);
   const pinnedRef = useRef(false);
   const touchStartY = useRef<number | null>(null);
+  const wheelAccumRef = useRef(0);
+  const lockTimerRef = useRef<number | null>(null);
+  const entrySnapTimerRef = useRef<number | null>(null);
+  const releasedDirRef = useRef<1 | -1 | null>(null);
 
   useEffect(() => {
     activeRef.current = active;
@@ -66,31 +73,79 @@ export function AnimatedSections() {
     const el = sectionRef.current;
     if (!el) return;
 
-    // Pinned = section fills the viewport.
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        pinnedRef.current = entry.intersectionRatio >= 0.9;
-      },
-      { threshold: [0, 0.5, 0.9, 1] },
-    );
-    io.observe(el);
-
-    const alignSection = () => {
+    const alignSection = (behavior: ScrollBehavior = "auto") => {
       const rect = el.getBoundingClientRect();
       if (Math.abs(rect.top) < 1) return;
-      window.scrollTo({ top: window.scrollY + rect.top });
+      window.scrollTo({ top: window.scrollY + rect.top, behavior });
+    };
+
+    const getCatchState = (dir: 1 | -1) => {
+      const rect = el.getBoundingClientRect();
+      const visible = rect.bottom > 0 && rect.top < window.innerHeight;
+      if (!visible) {
+        releasedDirRef.current = null;
+      }
+      return {
+        fromAbove: dir > 0 && rect.top > 1,
+        fromBelow: dir < 0 && rect.bottom < window.innerHeight - 1,
+        shouldCatch:
+          dir > 0
+            ? rect.bottom > 0 && rect.top <= window.innerHeight
+            : rect.top < window.innerHeight && rect.bottom >= 0,
+      };
+    };
+
+    const armLock = (ms = LOCK_MS) => {
+      lockedRef.current = true;
+      if (lockTimerRef.current) {
+        clearTimeout(lockTimerRef.current);
+      }
+      lockTimerRef.current = window.setTimeout(() => {
+        lockedRef.current = false;
+        lockTimerRef.current = null;
+      }, ms);
+    };
+
+    const release = (dir: 1 | -1) => {
+      pinnedRef.current = false;
+      wheelAccumRef.current = 0;
+      releasedDirRef.current = dir;
+    };
+
+    const tryCatch = (dir: 1 | -1) => {
+      if (pinnedRef.current || lockedRef.current) return false;
+      const catchState = getCatchState(dir);
+      if (!catchState.shouldCatch) return false;
+      if (releasedDirRef.current === dir) return false;
+      releasedDirRef.current = null;
+      wheelAccumRef.current = 0;
+      pinnedRef.current = true;
+      if (catchState.fromAbove || catchState.fromBelow) {
+        const entrySlide = catchState.fromAbove ? 0 : SLIDES.length - 1;
+        activeRef.current = entrySlide;
+        setActive(entrySlide);
+        alignSection("smooth");
+        armLock(ENTRY_LOCK_MS);
+        if (entrySnapTimerRef.current) {
+          clearTimeout(entrySnapTimerRef.current);
+        }
+        entrySnapTimerRef.current = window.setTimeout(() => {
+          alignSection("auto");
+          entrySnapTimerRef.current = null;
+        }, ENTRY_LOCK_MS);
+        return true;
+      }
+      alignSection("auto");
+      return true;
     };
 
     const advance = (dir: 1 | -1) => {
       if (lockedRef.current) return false;
       const next = activeRef.current + dir;
       if (next < 0 || next >= SLIDES.length) return false;
-      lockedRef.current = true;
       activeRef.current = next;
       setActive(next);
-      window.setTimeout(() => {
-        lockedRef.current = false;
-      }, LOCK_MS);
+      armLock();
       return true;
     };
 
@@ -100,29 +155,50 @@ export function AnimatedSections() {
     };
 
     const wheelHandler = (e: WheelEvent) => {
-      if (!pinnedRef.current) return;
       const dir: 1 | -1 = e.deltaY > 0 ? 1 : -1;
-      // While a transition is in flight, swallow scroll so the just-revealed
-      // slide (including the last one) is actually seen.
-      if (lockedRef.current) {
-        e.preventDefault();
+
+      if (!pinnedRef.current) {
+        if (tryCatch(dir)) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
         return;
       }
-      if (!canAdvance(dir)) return; // release: let the page scroll away
+
+      if (lockedRef.current) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      if (!canAdvance(dir)) {
+        release(dir);
+        return;
+      }
+
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 6) return;
-      advance(dir);
-      alignSection();
+      e.stopPropagation();
+      wheelAccumRef.current += e.deltaY;
+      if (Math.abs(wheelAccumRef.current) < WHEEL_THRESHOLD) return;
+      wheelAccumRef.current = 0;
+      if (advance(dir)) {
+        alignSection();
+      }
     };
-
-
     const keyHandler = (e: KeyboardEvent) => {
-      if (!pinnedRef.current) return;
       let dir: 1 | -1 | 0 = 0;
       if (["ArrowDown", "PageDown", " "].includes(e.key)) dir = 1;
       else if (["ArrowUp", "PageUp"].includes(e.key)) dir = -1;
       if (!dir) return;
-      if (!canAdvance(dir)) return;
+      if (!pinnedRef.current) {
+        if (tryCatch(dir)) e.preventDefault();
+        return;
+      }
+      if (!canAdvance(dir)) {
+        release(dir);
+        return;
+      }
       e.preventDefault();
       advance(dir);
       alignSection();
@@ -132,10 +208,20 @@ export function AnimatedSections() {
       touchStartY.current = e.touches[0]?.clientY ?? null;
     };
     const touchMove = (e: TouchEvent) => {
-      if (!pinnedRef.current || touchStartY.current == null) return;
+      if (touchStartY.current == null) return;
       const dy = touchStartY.current - (e.touches[0]?.clientY ?? 0);
       const dir: 1 | -1 = dy > 0 ? 1 : -1;
-      if (!canAdvance(dir)) return;
+      if (!pinnedRef.current) {
+        if (tryCatch(dir)) {
+          e.preventDefault();
+          touchStartY.current = null;
+        }
+        return;
+      }
+      if (!canAdvance(dir)) {
+        release(dir);
+        return;
+      }
       e.preventDefault();
       if (Math.abs(dy) < 30) return;
       if (advance(dir)) {
@@ -150,7 +236,8 @@ export function AnimatedSections() {
     window.addEventListener("touchmove", touchMove, { passive: false });
 
     return () => {
-      io.disconnect();
+      if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
+      if (entrySnapTimerRef.current) clearTimeout(entrySnapTimerRef.current);
       window.removeEventListener("wheel", wheelHandler);
       window.removeEventListener("keydown", keyHandler);
       window.removeEventListener("touchstart", touchStart);
@@ -185,7 +272,10 @@ export function AnimatedSections() {
                 style={{ backgroundImage: `url(${s.image})` }}
               />
               {/* Cinematic grade: flat overlay + vignette */}
-              <div className="pointer-events-none absolute inset-0" style={{ background: "rgba(10,15,35,0.55)" }} />
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{ background: "rgba(10,15,35,0.55)" }}
+              />
               <div
                 className="pointer-events-none absolute inset-0"
                 style={{
@@ -225,8 +315,7 @@ export function AnimatedSections() {
                       transform: isActive
                         ? "translateY(0) scale(1)"
                         : "translateY(40px) scale(0.96)",
-                      transition:
-                        "opacity 700ms ease-out, transform 700ms ease-out",
+                      transition: "opacity 700ms ease-out, transform 700ms ease-out",
                     }}
                   >
                     {s.word}
@@ -235,8 +324,7 @@ export function AnimatedSections() {
                       style={{
                         opacity: isActive ? 1 : 0,
                         transform: isActive ? "scale(1)" : "scale(0.6)",
-                        transition:
-                          "opacity 400ms ease-out 900ms, transform 400ms ease-out 900ms",
+                        transition: "opacity 400ms ease-out 900ms, transform 400ms ease-out 900ms",
                       }}
                     >
                       .
@@ -277,7 +365,6 @@ export function AnimatedSections() {
             </div>
           </div>
         );
-
       })}
 
       <div className="pointer-events-none absolute right-6 top-1/2 z-50 flex -translate-y-1/2 flex-col gap-3 md:right-10">
@@ -290,8 +377,6 @@ export function AnimatedSections() {
           />
         ))}
       </div>
-
     </div>
   );
 }
-

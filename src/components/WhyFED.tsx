@@ -36,6 +36,7 @@ const SLIDES: Slide[] = [
 ];
 
 const LOCK_MS = 900;
+const ENTRY_LOCK_MS = 950;
 
 export function WhyFED() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -44,6 +45,8 @@ export function WhyFED() {
   const lockedRef = useRef(false);
   const pinnedRef = useRef(false);
   const touchStartY = useRef<number | null>(null);
+  const lockTimerRef = useRef<number | null>(null);
+  const entrySnapTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     iRef.current = i;
@@ -55,16 +58,54 @@ export function WhyFED() {
 
     const io = new IntersectionObserver(
       ([entry]) => {
-        pinnedRef.current = entry.intersectionRatio >= 0.9;
+        const isPinned = entry.intersectionRatio >= 0.9;
+        pinnedRef.current = isPinned;
+        if (!isPinned) return;
+
+        const entryIndex = entry.boundingClientRect.top < 0 ? SLIDES.length - 1 : 0;
+        if (iRef.current === entryIndex) return;
+        iRef.current = entryIndex;
+        setI(entryIndex);
       },
       { threshold: [0, 0.5, 0.9, 1] },
     );
     io.observe(el);
 
-    const align = () => {
+    const align = (behavior: ScrollBehavior = "auto") => {
       const rect = el.getBoundingClientRect();
       if (Math.abs(rect.top) < 1) return;
-      window.scrollTo({ top: window.scrollY + rect.top });
+      window.scrollTo({ top: window.scrollY + rect.top, behavior });
+    };
+
+    const armLock = (ms = LOCK_MS) => {
+      lockedRef.current = true;
+      if (lockTimerRef.current) {
+        clearTimeout(lockTimerRef.current);
+      }
+      lockTimerRef.current = window.setTimeout(() => {
+        lockedRef.current = false;
+        lockTimerRef.current = null;
+      }, ms);
+    };
+
+    const tryEnterFromAbove = () => {
+      if (pinnedRef.current || lockedRef.current) return false;
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= 1 || rect.top > window.innerHeight) return false;
+
+      pinnedRef.current = true;
+      iRef.current = 0;
+      setI(0);
+      align("smooth");
+      armLock(ENTRY_LOCK_MS);
+      if (entrySnapTimerRef.current) {
+        clearTimeout(entrySnapTimerRef.current);
+      }
+      entrySnapTimerRef.current = window.setTimeout(() => {
+        align("auto");
+        entrySnapTimerRef.current = null;
+      }, ENTRY_LOCK_MS);
+      return true;
     };
 
     const canAdvance = (dir: 1 | -1) => {
@@ -76,31 +117,37 @@ export function WhyFED() {
       if (lockedRef.current) return false;
       const n = iRef.current + dir;
       if (n < 0 || n >= SLIDES.length) return false;
-      lockedRef.current = true;
       iRef.current = n;
       setI(n);
-      window.setTimeout(() => {
-        lockedRef.current = false;
-      }, LOCK_MS);
+      armLock();
       return true;
     };
 
     const onWheel = (e: WheelEvent) => {
-      if (!pinnedRef.current) return;
+      if (e.defaultPrevented) return;
       const dir: 1 | -1 = e.deltaY > 0 ? 1 : -1;
+      if (!pinnedRef.current) {
+        if (dir > 0 && tryEnterFromAbove()) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        return;
+      }
       if (lockedRef.current) {
         e.preventDefault();
+        e.stopPropagation();
         return;
       }
       if (!canAdvance(dir)) return;
       e.preventDefault();
+      e.stopPropagation();
       if (Math.abs(e.deltaY) < 6) return;
       advance(dir);
       align();
     };
 
     const onKey = (e: KeyboardEvent) => {
-      if (!pinnedRef.current) return;
+      if (e.defaultPrevented || !pinnedRef.current) return;
       let dir: 1 | -1 | 0 = 0;
       if (["ArrowDown", "PageDown", " "].includes(e.key)) dir = 1;
       else if (["ArrowUp", "PageUp"].includes(e.key)) dir = -1;
@@ -115,9 +162,16 @@ export function WhyFED() {
       touchStartY.current = e.touches[0]?.clientY ?? null;
     };
     const tm = (e: TouchEvent) => {
-      if (!pinnedRef.current || touchStartY.current == null) return;
+      if (e.defaultPrevented || touchStartY.current == null) return;
       const dy = touchStartY.current - (e.touches[0]?.clientY ?? 0);
       const dir: 1 | -1 = dy > 0 ? 1 : -1;
+      if (!pinnedRef.current) {
+        if (dir > 0 && tryEnterFromAbove()) {
+          e.preventDefault();
+          touchStartY.current = null;
+        }
+        return;
+      }
       if (!canAdvance(dir)) return;
       e.preventDefault();
       if (Math.abs(dy) < 30) return;
@@ -134,6 +188,8 @@ export function WhyFED() {
 
     return () => {
       io.disconnect();
+      if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
+      if (entrySnapTimerRef.current) clearTimeout(entrySnapTimerRef.current);
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("touchstart", ts);
@@ -147,7 +203,7 @@ export function WhyFED() {
     <section
       id="why-fed"
       ref={sectionRef}
-      
+
       className="relative min-h-screen w-full overflow-hidden bg-white md:h-screen"
     >
       <div className="mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-0 px-8 pt-[88px] pb-10 md:h-full md:grid-cols-[52fr_48fr]">
@@ -161,8 +217,7 @@ export function WhyFED() {
               className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
               style={{
                 opacity: idx === i ? 1 : 0,
-                objectPosition:
-                  idx === 1 ? "center 20%" : idx === 2 ? "30% center" : "center",
+                objectPosition: idx === 1 ? "center 20%" : idx === 2 ? "30% center" : "center",
               }}
             />
           ))}
@@ -197,7 +252,16 @@ export function WhyFED() {
               aria-label="Previous chapter"
               className="flex h-11 w-11 items-center justify-center rounded-full border border-[#1B2A5E]/20 text-[#1B2A5E] transition hover:border-[#D62828] hover:text-[#D62828] disabled:opacity-30 disabled:hover:border-[#1B2A5E]/20 disabled:hover:text-[#1B2A5E]"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
             </button>
             <button
               type="button"
@@ -211,7 +275,16 @@ export function WhyFED() {
               aria-label="Next chapter"
               className="flex h-11 w-11 items-center justify-center rounded-full border border-[#1B2A5E]/20 text-[#1B2A5E] transition hover:border-[#D62828] hover:text-[#D62828] disabled:opacity-30 disabled:hover:border-[#1B2A5E]/20 disabled:hover:text-[#1B2A5E]"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 6l6 6-6 6"/></svg>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M9 6l6 6-6 6" />
+              </svg>
             </button>
             <div className="flex items-center gap-3 pl-2">
               {SLIDES.map((_, idx) => (
