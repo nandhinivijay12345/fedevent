@@ -6,6 +6,7 @@ export type ParticipationFormState = {
   full_name: string;
   visitor_type: string;
   visitor_type_other: string;
+  designation: string;
   organisation: string;
   city: string;
   email: string;
@@ -21,6 +22,7 @@ export function useParticipationForm() {
     full_name: "",
     visitor_type: "",
     visitor_type_other: "",
+    designation: "",
     organisation: "",
     city: "",
     email: "",
@@ -55,6 +57,7 @@ export function useParticipationForm() {
         full_name: f.full_name,
         visitor_type: f.visitor_type,
         visitor_type_other: f.visitor_type === "Other" ? f.visitor_type_other.trim() : null,
+        designation: f.designation,
         organisation: f.organisation.trim() || null,
         city: f.city,
         email: f.email,

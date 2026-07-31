@@ -97,6 +97,7 @@ export type Database = {
           authorised: boolean
           bio: string
           created_at: string
+          designation: string
           email: string
           guest_passes: number
           id: string
@@ -110,6 +111,7 @@ export type Database = {
           authorised?: boolean
           bio: string
           created_at?: string
+          designation: string
           email: string
           guest_passes: number
           id?: string
@@ -123,6 +125,7 @@ export type Database = {
           authorised?: boolean
           bio?: string
           created_at?: string
+          designation?: string
           email?: string
           guest_passes?: number
           id?: string
@@ -180,6 +183,7 @@ export type Database = {
         Row: {
           city: string
           created_at: string
+          designation: string
           email: string
           full_name: string
           guest_count: number
@@ -194,6 +198,7 @@ export type Database = {
         Insert: {
           city: string
           created_at?: string
+          designation: string
           email: string
           full_name: string
           guest_count?: number
@@ -208,6 +213,7 @@ export type Database = {
         Update: {
           city?: string
           created_at?: string
+          designation?: string
           email?: string
           full_name?: string
           guest_count?: number

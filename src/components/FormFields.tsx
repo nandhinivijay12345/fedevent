@@ -6,7 +6,6 @@ import type { useNominateForm } from "@/hooks/useNominateForm";
 import type { useIndividualAwardForm } from "@/hooks/useIndividualAwardForm";
 import type { useParticipationForm } from "@/hooks/useParticipationForm";
 
-export const DESIGNATIONS = ["Principal", "Correspondent", "Director", "Coordinator", "Other"];
 export const BOARD_AFFILIATIONS = ["CBSE", "ICSE", "IB", "State Board", "International", "Other"];
 export const SCHOOL_TYPES = ["K-12 (Full)", "K-5 / Primary Only", "6-12 / Secondary Only", "Pre-K Only", "Other"];
 export const INDIVIDUAL_ROLES = ["Educator", "Entrepreneur", "Policy Maker", "Innovator", "Researcher", "Student", "Other"];
@@ -24,7 +23,6 @@ type InstitutionCopy = {
   typeOptions: string[];
   strengthLabel: string;
   accreditationsPlaceholder: string;
-  designationOptions: string[];
   emailLabel: string;
   recipientPrompt: string;
   primaryPassesLabel: string;
@@ -45,7 +43,6 @@ export const INSTITUTION_COPY: Record<InstitutionTrack, InstitutionCopy> = {
     typeOptions: SCHOOL_TYPES,
     strengthLabel: "Total Student Strength",
     accreditationsPlaceholder: "e.g. prior AIAASC/WASC recognition, ISO certification, government awards",
-    designationOptions: ["Principal", "Correspondent", "Director", "Coordinator", "Other"],
     emailLabel: "Official School Email",
     recipientPrompt: "Who will be receiving the award on behalf of your school?",
     primaryPassesLabel: "Student Passes",
@@ -62,7 +59,6 @@ export const INSTITUTION_COPY: Record<InstitutionTrack, InstitutionCopy> = {
     typeOptions: ORGANIZATION_TYPES,
     strengthLabel: "Total Team Strength",
     accreditationsPlaceholder: "e.g. ISO certification, CSR recognitions, industry awards",
-    designationOptions: ["CEO / Founder", "Director", "HR Head", "Manager", "Other"],
     emailLabel: "Official Organization Email",
     recipientPrompt: "Who will be receiving the award on behalf of your organization?",
     primaryPassesLabel: "Team Passes",
@@ -81,7 +77,6 @@ export const INSTITUTION_COPY: Record<InstitutionTrack, InstitutionCopy> = {
     typeOptions: INSTITUTION_TYPES,
     strengthLabel: "Total Student Strength",
     accreditationsPlaceholder: "e.g. NAAC, NBA, UGC recognitions",
-    designationOptions: ["Vice Chancellor", "Dean", "Registrar", "Principal", "Other"],
     emailLabel: "Official Institution Email",
     recipientPrompt: "Who will be receiving the award on behalf of your institution?",
     primaryPassesLabel: "Student Passes",
@@ -302,7 +297,7 @@ export function InstitutionAwardFields({
         <Chapter n={c2.n} label={c2.label} innerRef={(el) => (chapterRefs.current[1] = el)}>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <LineField label="Your Name" name="your_name" required value={f.your_name} onChange={(v) => set("your_name", v)} />
-            <LineSelect label="Designation" required value={f.designation} onChange={(v) => set("designation", v)} options={copy.designationOptions} />
+            <LineField label="Designation" name="designation" required value={f.designation} onChange={(v) => set("designation", v)} />
           </div>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <LineField label={copy.emailLabel} name="email" type="email" inputMode="email" required value={f.email} onChange={(v) => set("email", v)} />
@@ -343,12 +338,12 @@ export function InstitutionAwardFields({
                     value={f.award_recipient_name}
                     onChange={(v) => set("award_recipient_name", v)}
                   />
-                  <LineSelect
+                  <LineField
                     label="Their Designation"
+                    name="award_recipient_designation"
                     required
                     value={f.award_recipient_designation}
                     onChange={(v) => set("award_recipient_designation", v)}
-                    options={copy.designationOptions}
                   />
                 </div>
                 <PhoneField
@@ -476,14 +471,17 @@ export function IndividualAwardFields({
             <LineField label="Your Name" name="your_name" required value={f.your_name} onChange={(v) => set("your_name", v)} />
             <LineSelect label="Role" required value={f.role} onChange={(v) => set("role", v)} options={INDIVIDUAL_ROLES} />
           </div>
-          <LineField
-            label="Organisation / School"
-            name="organisation"
-            required
-            helper="The company, school, or institution you're affiliated with."
-            value={f.organisation}
-            onChange={(v) => set("organisation", v)}
-          />
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <LineField label="Designation" name="designation" required value={f.designation} onChange={(v) => set("designation", v)} />
+            <LineField
+              label="Organisation / School"
+              name="organisation"
+              required
+              helper="The company, school, or institution you're affiliated with."
+              value={f.organisation}
+              onChange={(v) => set("organisation", v)}
+            />
+          </div>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <LineField label="Email" name="email" type="email" inputMode="email" required value={f.email} onChange={(v) => set("email", v)} />
             <PhoneField
@@ -549,7 +547,7 @@ export function NominationFields({ f, set, error, loading, submit }: NominationF
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <LineField label="Your Name" name="your_name" required value={f.your_name} onChange={(v) => set("your_name", v)} />
-        <LineSelect label="Designation" required value={f.designation} onChange={(v) => set("designation", v)} options={DESIGNATIONS} />
+        <LineField label="Designation" name="designation" required value={f.designation} onChange={(v) => set("designation", v)} />
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <LineField label="Official Email" name="email" type="email" inputMode="email" required value={f.email} onChange={(v) => set("email", v)} />
@@ -618,13 +616,7 @@ export function ParticipationFields({ f, set, error, loading, submit }: Particip
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <LineSelect label="I am a…" required value={f.visitor_type} onChange={(v) => set("visitor_type", v)} options={VISITOR_TYPES} />
-        <LineField
-          label="Organisation / School"
-          name="organisation"
-          helper="Optional"
-          value={f.organisation}
-          onChange={(v) => set("organisation", v)}
-        />
+        <LineField label="Designation" name="designation" required value={f.designation} onChange={(v) => set("designation", v)} />
       </div>
       {f.visitor_type === "Other" && (
         <LineField
@@ -635,6 +627,13 @@ export function ParticipationFields({ f, set, error, loading, submit }: Particip
           onChange={(v) => set("visitor_type_other", v)}
         />
       )}
+      <LineField
+        label="Organisation / School"
+        name="organisation"
+        helper="Optional"
+        value={f.organisation}
+        onChange={(v) => set("organisation", v)}
+      />
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <LineField label="Email" name="email" type="email" inputMode="email" required value={f.email} onChange={(v) => set("email", v)} />
         <PhoneField

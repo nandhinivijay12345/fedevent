@@ -6,6 +6,7 @@ import type { SignatureHandle } from "@/components/SignaturePad";
 export type IndividualAwardFormState = {
   your_name: string;
   role: string;
+  designation: string;
   organisation: string;
   email: string;
   phone_country_code: string;
@@ -19,6 +20,7 @@ export function useIndividualAwardForm() {
   const [f, setF] = useState<IndividualAwardFormState>({
     your_name: "",
     role: "",
+    designation: "",
     organisation: "",
     email: "",
     phone_country_code: "+91",
@@ -68,6 +70,7 @@ export function useIndividualAwardForm() {
       const { error: insertError } = await supabase.from("individual_award_registrations").insert({
         your_name: f.your_name,
         role: f.role,
+        designation: f.designation,
         organisation: f.organisation.trim(),
         email: f.email,
         phone: `${f.phone_country_code.trim()} ${f.phone.trim()}`.trim(),
