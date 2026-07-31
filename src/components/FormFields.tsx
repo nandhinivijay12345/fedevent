@@ -11,6 +11,7 @@ export const SCHOOL_TYPES = ["K-12 (Full)", "K-5 / Primary Only", "6-12 / Second
 export const INDIVIDUAL_ROLES = ["Educator", "Entrepreneur", "Policy Maker", "Innovator", "Researcher", "Student", "Other"];
 export const VISITOR_TYPES = ["Parent / Guardian", "Student", "Educator", "Industry Professional", "Media", "General Public", "Other"];
 export const ORGANIZATION_TYPES = ["Corporate", "Startup", "NGO / Non-Profit", "Government / PSU", "Other"];
+export const ORGANIZATION_INDUSTRIES = ["Education", "Technology", "Healthcare", "Finance", "Manufacturing", "Retail", "Other"];
 export const UNIVERSITY_AFFILIATIONS = ["Autonomous", "State University", "Central University", "Deemed University", "Private University", "Other"];
 export const INSTITUTION_TYPES = ["Engineering & Technology", "Arts & Science", "Medical", "Management", "Multi-Disciplinary", "Other"];
 
@@ -55,6 +56,8 @@ export const INSTITUTION_COPY: Record<InstitutionTrack, InstitutionCopy> = {
   organization: {
     profileLabel: "Organization Profile",
     entityLabel: "Organization Name",
+    categoryLabel: "Industry",
+    categoryOptions: ORGANIZATION_INDUSTRIES,
     typeLabel: "Organization Type",
     typeOptions: ORGANIZATION_TYPES,
     strengthLabel: "Total Team Strength",

@@ -34,6 +34,7 @@ const TRACK_COLUMNS: Record<
   },
   organization: {
     entity_name: "organization_name",
+    category: "industry",
     type_field: "organization_type",
     type_field_other: "organization_type_other",
     total_strength: "total_team_strength",
