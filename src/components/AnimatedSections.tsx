@@ -49,9 +49,8 @@ const SLIDES: Slide[] = [
   },
 ];
 
-const LOCK_MS = 700;
+const WHEEL_SETTLE_MS = 220;
 const ENTRY_LOCK_MS = 950;
-const WHEEL_THRESHOLD = 24;
 
 export function AnimatedSections() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -60,7 +59,6 @@ export function AnimatedSections() {
   const lockedRef = useRef(false);
   const pinnedRef = useRef(false);
   const touchStartY = useRef<number | null>(null);
-  const wheelAccumRef = useRef(0);
   const lockTimerRef = useRef<number | null>(null);
   const entrySnapTimerRef = useRef<number | null>(null);
   const releasedDirRef = useRef<1 | -1 | null>(null);
@@ -95,8 +93,22 @@ export function AnimatedSections() {
       };
     };
 
-    const armLock = (ms = LOCK_MS) => {
+    const armLock = (ms = WHEEL_SETTLE_MS) => {
       lockedRef.current = true;
+      if (lockTimerRef.current) {
+        clearTimeout(lockTimerRef.current);
+      }
+      lockTimerRef.current = window.setTimeout(() => {
+        lockedRef.current = false;
+        lockTimerRef.current = null;
+      }, ms);
+    };
+
+    // Called on every wheel event that arrives while already locked. A single
+    // trackpad swipe fires a long tail of momentum events after the finger
+    // lifts, so we keep pushing the unlock time out until the gesture actually
+    // goes quiet for WHEEL_SETTLE_MS, instead of racing a fixed timer against it.
+    const extendLock = (ms = WHEEL_SETTLE_MS) => {
       if (lockTimerRef.current) {
         clearTimeout(lockTimerRef.current);
       }
@@ -108,7 +120,6 @@ export function AnimatedSections() {
 
     const release = (dir: 1 | -1) => {
       pinnedRef.current = false;
-      wheelAccumRef.current = 0;
       releasedDirRef.current = dir;
     };
 
@@ -118,7 +129,6 @@ export function AnimatedSections() {
       if (!catchState.shouldCatch) return false;
       if (releasedDirRef.current === dir) return false;
       releasedDirRef.current = null;
-      wheelAccumRef.current = 0;
       pinnedRef.current = true;
       if (catchState.fromAbove || catchState.fromBelow) {
         const entrySlide = catchState.fromAbove ? 0 : SLIDES.length - 1;
@@ -169,6 +179,7 @@ export function AnimatedSections() {
       if (lockedRef.current) {
         e.preventDefault();
         e.stopPropagation();
+        extendLock();
         return;
       }
 
@@ -179,9 +190,6 @@ export function AnimatedSections() {
 
       e.preventDefault();
       e.stopPropagation();
-      wheelAccumRef.current += e.deltaY;
-      if (Math.abs(wheelAccumRef.current) < WHEEL_THRESHOLD) return;
-      wheelAccumRef.current = 0;
       if (advance(dir)) {
         alignSection();
       }
