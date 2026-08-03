@@ -30,7 +30,7 @@ const ROWS: Row[] = [
     body: "The India Challenge — with Kidspreneur, the Peter Jones Foundation and American World School — puts student founders on FED's main stage. Winners take their ideas to the British Parliament.",
     cta: { label: "Enter the India Challenge", href: "https://www.kidspreneur.org/global-flash-challenge", pill: true },
     image: img1,
-    imageObjectPosition: "40% 15%",
+    imageObjectPosition: "center 15%",
     alt: "Students at the British Parliament",
     imageSide: "left",
   },
