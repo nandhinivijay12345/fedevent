@@ -12,9 +12,9 @@ type AwardTrack = "individual" | InstitutionTrack;
 
 const TRACK_OPTIONS: { value: AwardTrack; label: string }[] = [
   { value: "individual", label: "Educator Of The Year Award" },
-  { value: "school", label: "Schools Of The Future Award" },
-  { value: "organization", label: "Institute of Excellence Award" },
-  { value: "college", label: "Higher Education Frontier Award" },
+  { value: "school", label: "Top 100 Schools" },
+  { value: "organization", label: "Organizations of Excellence" },
+  { value: "college", label: "Top 25 Colleges" },
 ];
 
 const TRACK_DESCRIPTIONS: Record<AwardTrack, string> = {

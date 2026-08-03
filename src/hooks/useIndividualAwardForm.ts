@@ -43,7 +43,7 @@ export function useIndividualAwardForm() {
     e.preventDefault();
     setError(null);
     if (!f.organisation.trim()) {
-      return setError("Please enter your organisation or school.");
+      return setError("Please enter your organization or school.");
     }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) {
       return setError("Enter a valid email address.");

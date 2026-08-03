@@ -72,7 +72,7 @@ export const INSTITUTION_COPY: Record<InstitutionTrack, InstitutionCopy> = {
     authorisedLabel: "I confirm I am authorised to represent this organization.",
   },
   college: {
-    profileLabel: "College/ University Profile",
+    profileLabel: "College / University Profile",
     entityLabel: "College / University Name",
     categoryLabel: "University Affiliation",
     categoryOptions: UNIVERSITY_AFFILIATIONS,
@@ -477,7 +477,7 @@ export function IndividualAwardFields({
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <LineField label="Designation" name="designation" required value={f.designation} onChange={(v) => set("designation", v)} />
             <LineField
-              label="Organisation / School"
+              label="Organization / School"
               name="organisation"
               required
               helper="The company, school, or institution you're affiliated with."
@@ -631,7 +631,7 @@ export function ParticipationFields({ f, set, error, loading, submit }: Particip
         />
       )}
       <LineField
-        label="Organisation / School"
+        label="Organization / School"
         name="organisation"
         helper="Optional"
         value={f.organisation}

@@ -14,7 +14,7 @@ const REASONS: Reason[] = [
   { label: "Best Practices",     blurb: "Frameworks other schools are quietly adopting.",       image: orbit6 },
   { label: "Expert Speakers",    blurb: "Educators who built what everyone else discusses.",    image: orbit3 },
   { label: "School Networking",  blurb: "The partnerships that outlast the day itself.",        image: orbit4 },
-  { label: "Future Trends",      blurb: "Where the next five years of learning is drafted.",    image: futureTrends },
+  { label: "Future Trends",      blurb: "Where the next five years of learning are drafted.",   image: futureTrends },
   { label: "Student Showcase",   blurb: "The children rewriting what school can be.",           image: showcase },
 ];
 
