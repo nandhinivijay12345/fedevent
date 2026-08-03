@@ -35,7 +35,7 @@ const SLIDES: Slide[] = [
   },
 ];
 
-const WHEEL_SETTLE_MS = 220;
+const WHEEL_LOCK_MS = 850;
 const ENTRY_LOCK_MS = 950;
 
 export function WhyFED() {
@@ -77,21 +77,8 @@ export function WhyFED() {
       window.scrollTo({ top: window.scrollY + rect.top, behavior });
     };
 
-    const armLock = (ms = WHEEL_SETTLE_MS) => {
+    const armLock = (ms = WHEEL_LOCK_MS) => {
       lockedRef.current = true;
-      if (lockTimerRef.current) {
-        clearTimeout(lockTimerRef.current);
-      }
-      lockTimerRef.current = window.setTimeout(() => {
-        lockedRef.current = false;
-        lockTimerRef.current = null;
-      }, ms);
-    };
-
-    // Momentum from a single trackpad swipe keeps firing wheel events after the
-    // finger lifts. Push the unlock time out on each of those instead of letting
-    // a fixed timer expire mid-momentum and let the tail trigger a second advance.
-    const extendLock = (ms = WHEEL_SETTLE_MS) => {
       if (lockTimerRef.current) {
         clearTimeout(lockTimerRef.current);
       }
@@ -149,7 +136,6 @@ export function WhyFED() {
       if (lockedRef.current) {
         e.preventDefault();
         e.stopPropagation();
-        extendLock();
         return;
       }
       if (!canAdvance(dir)) return;

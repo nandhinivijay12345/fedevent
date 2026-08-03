@@ -49,7 +49,7 @@ const SLIDES: Slide[] = [
   },
 ];
 
-const WHEEL_SETTLE_MS = 220;
+const WHEEL_LOCK_MS = 850;
 const ENTRY_LOCK_MS = 950;
 
 export function AnimatedSections() {
@@ -93,22 +93,8 @@ export function AnimatedSections() {
       };
     };
 
-    const armLock = (ms = WHEEL_SETTLE_MS) => {
+    const armLock = (ms = WHEEL_LOCK_MS) => {
       lockedRef.current = true;
-      if (lockTimerRef.current) {
-        clearTimeout(lockTimerRef.current);
-      }
-      lockTimerRef.current = window.setTimeout(() => {
-        lockedRef.current = false;
-        lockTimerRef.current = null;
-      }, ms);
-    };
-
-    // Called on every wheel event that arrives while already locked. A single
-    // trackpad swipe fires a long tail of momentum events after the finger
-    // lifts, so we keep pushing the unlock time out until the gesture actually
-    // goes quiet for WHEEL_SETTLE_MS, instead of racing a fixed timer against it.
-    const extendLock = (ms = WHEEL_SETTLE_MS) => {
       if (lockTimerRef.current) {
         clearTimeout(lockTimerRef.current);
       }
@@ -179,7 +165,6 @@ export function AnimatedSections() {
       if (lockedRef.current) {
         e.preventDefault();
         e.stopPropagation();
-        extendLock();
         return;
       }
 
