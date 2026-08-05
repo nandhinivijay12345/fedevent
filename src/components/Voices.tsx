@@ -24,7 +24,7 @@ const PANELISTS: Panelist[] = [
   { name: "Bhavanishankar", title: "Director - Strategy, Research and Innovation", org: "Omega Schools", image: bhavanishankar },
   { name: "Vimala Britto", title: "Curriculum Expert", org: "Fefdy Curriculum", image: vimala },
   { name: "Nawabzada Mohamed Asif Ali", title: "Prince of Arcot", org: "", image: prince },
-  { name: "Dr. Kabaly P Subramanian", title: "President", org: "Senior Academic at Arab Open University, Oman", image: kabali },
+  { name: "Dr. Kabaly P Subramanian", title: "Senior Academic", org: "Arab Open University, Oman", image: kabali },
   { name: "CK Kumaravel", title: "Co-founder & CMD", org: "Naturals Salon & Spa", image: ckKumaravel },
 ];
 
