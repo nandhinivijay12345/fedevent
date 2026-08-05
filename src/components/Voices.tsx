@@ -1,25 +1,31 @@
 import { useState } from "react";
 
-import p5 from "@/assets/person5.png";
-import p6 from "@/assets/person6.png";
-import p7 from "@/assets/person7.png";
-import p8 from "@/assets/person8.png";
-import p9 from "@/assets/person9.png";
-import p10 from "@/assets/person10.png";
-import p11 from "@/assets/person11.png";
-import p12 from "@/assets/person12.png";
+import markNoufel from "@/assets/marknoufel.png";
+import mohanalakshmi from "@/assets/mohanalakshmi.png";
+import margaret from "@/assets/margaret.png";
+import vimala from "@/assets/vimala.png";
+import bill from "@/assets/bill.png";
+import madhan from "@/assets/madhan.png";
+import paul from "@/assets/paul.png";
+import bhavanishankar from "@/assets/bhavanishankar.png";
+import prince from "@/assets/prince.png";
+import kabali from "@/assets/kabali.png";
+import ckKumaravel from "@/assets/ckkumaravel.png";
 
 type Panelist = { name: string; title: string; org: string; image?: string };
 
 const PANELISTS: Panelist[] = [
-  { name: "Mark Noufel", title: "President", org: "University of Silicon Valley", image: p5 },
-  { name: "Dr. Mohanalakshmi", title: "Founder", org: "American World School", image: p6 },
-  { name: "Bill", title: "Managing Director", org: "Peter Jones Foundation", image: p11 },
-  { name: "Dr. Margaret", title: "International Vice President", org: "Western Association of Schools and Colleges", image: p7 },
-  { name: "Dr. Madhan Karky", title: "Founder", org: "KaReFo", image: p12 },
-  { name: "Paul Montague", title: "Chief Executive Officer", org: "Go Early College", image: p9 },
-  { name: "Bhavanishankar", title: "Director - Strategy, Research and Innovation", org: "Omega Schools", image: p8 },
-  { name: "Vimala Britto", title: "Curriculum Expert", org: "Fefdy Curriculum", image: p10 },
+  { name: "Mark Noufel", title: "President", org: "University of Silicon Valley", image: markNoufel },
+  { name: "Dr. Mohanalakshmi", title: "Founder", org: "American World School", image: mohanalakshmi },
+  { name: "Bill", title: "Managing Director", org: "Peter Jones Foundation", image: bill },
+  { name: "Dr. Margaret", title: "International Vice President", org: "Western Association of Schools and Colleges", image: margaret },
+  { name: "Dr. Madhan Karky", title: "Founder", org: "KaReFo", image: madhan },
+  { name: "Paul Montague", title: "Chief Executive Officer", org: "Go Early College", image: paul },
+  { name: "Bhavanishankar", title: "Director - Strategy, Research and Innovation", org: "Omega Schools", image: bhavanishankar },
+  { name: "Vimala Britto", title: "Curriculum Expert", org: "Fefdy Curriculum", image: vimala },
+  { name: "Nawabzada Mohamed Asif Ali", title: "Prince of Arcot", org: "", image: prince },
+  { name: "Dr. Kabaly P Subramanian", title: "President", org: "Senior Academic at Arab Open University, Oman", image: kabali },
+  { name: "CK Kumaravel", title: "Co-founder & CMD", org: "Naturals Salon & Spa", image: ckKumaravel },
 ];
 
 
@@ -43,7 +49,7 @@ export function Voices() {
             </h2>
           </div>
           <div className="text-[12px] uppercase tracking-[0.22em] text-[#6b7699]">
-            8 Speakers · More Announced Soon
+            11 Speakers · More Announced Soon
           </div>
         </div>
 
@@ -66,6 +72,7 @@ export function Voices() {
                     alt={p.name}
                     loading="lazy"
                     className="absolute inset-0 h-full w-full rounded-full object-cover"
+                    style={{ objectPosition: "50% 25%" }}
                   />
                 </div>
               ) : (
@@ -77,11 +84,13 @@ export function Voices() {
                 </div>
               )}
 
-              <div className="mt-5 font-serif text-[22px] leading-tight text-[#1B2A5E]">{p.name}</div>
-              <div className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#D62828]">
-                {p.title}
+              <div className="mt-5 flex min-h-[104px] flex-col items-center">
+                <div className="font-serif text-[22px] leading-tight text-[#1B2A5E]">{p.name}</div>
+                <div className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#D62828]">
+                  {p.title}
+                </div>
+                <div className="mt-1 text-[14px] text-[#6b7699]">{p.org}</div>
               </div>
-              <div className="mt-1 text-[14px] text-[#6b7699]">{p.org}</div>
             </button>
           ))}
         </div>
@@ -112,7 +121,12 @@ export function Voices() {
             </button>
             <div className="flex flex-col items-center text-center">
               {active.image ? (
-                <img src={active.image} alt={active.name} className="h-44 w-44 md:h-56 md:w-56 rounded-full object-cover" />
+                <img
+                  src={active.image}
+                  alt={active.name}
+                  className="h-44 w-44 md:h-56 md:w-56 rounded-full object-cover"
+                  style={{ objectPosition: "50% 25%" }}
+                />
               ) : (
                 <div className="flex h-44 w-44 items-center justify-center rounded-full bg-[#1B2A5E] md:h-56 md:w-56">
                   <span className="font-serif text-[72px] text-white">{initials(active.name)}</span>
