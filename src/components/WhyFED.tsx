@@ -35,7 +35,9 @@ const SLIDES: Slide[] = [
   },
 ];
 
-const WHEEL_LOCK_MS = 850;
+const WHEEL_LOCK_MS = 350;
+const MOMENTUM_EXTEND_MS = 300;
+const MOMENTUM_NOISE_DELTA = 3;
 const ENTRY_LOCK_MS = 950;
 
 export function WhyFED() {
@@ -79,6 +81,22 @@ export function WhyFED() {
 
     const armLock = (ms = WHEEL_LOCK_MS) => {
       lockedRef.current = true;
+      if (lockTimerRef.current) {
+        clearTimeout(lockTimerRef.current);
+      }
+      lockTimerRef.current = window.setTimeout(() => {
+        lockedRef.current = false;
+        lockTimerRef.current = null;
+      }, ms);
+    };
+
+    // Called while locked, for wheel events still carrying real momentum
+    // (deltaY above the noise floor). Keeps pushing the unlock out for as
+    // long as the trackpad's momentum genuinely keeps flowing, so a hard
+    // flick can't outlast the lock and trigger a second advance — but once
+    // events decay into the tail-end dribble, we stop extending and let the
+    // lock expire on schedule instead of waiting for total silence.
+    const extendLock = (ms = MOMENTUM_EXTEND_MS) => {
       if (lockTimerRef.current) {
         clearTimeout(lockTimerRef.current);
       }
@@ -136,6 +154,9 @@ export function WhyFED() {
       if (lockedRef.current) {
         e.preventDefault();
         e.stopPropagation();
+        if (Math.abs(e.deltaY) > MOMENTUM_NOISE_DELTA) {
+          extendLock();
+        }
         return;
       }
       if (!canAdvance(dir)) return;
