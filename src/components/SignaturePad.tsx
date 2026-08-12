@@ -148,7 +148,7 @@ export function SignaturePad({
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="underline decoration-dotted hover:text-[#1B2A5E]"
+          className="-my-2.5 py-2.5 underline decoration-dotted hover:text-[#1B2A5E]"
         >
           or upload image
         </button>
@@ -164,7 +164,7 @@ export function SignaturePad({
             setUploaded(null);
             setDrawn(false);
           }}
-          className="text-[#1B2A5E]/60 hover:text-[#1B2A5E]"
+          className="-my-2.5 py-2.5 text-[#1B2A5E]/60 hover:text-[#1B2A5E]"
         >
           Clear
         </button>

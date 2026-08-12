@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import slide1 from "@/assets/converge.jpg";
 import slide2 from "@/assets/listen-3.jpg";
 import slide3 from "@/assets/slide3.png";
 import slide4 from "@/assets/launch.jpg";
 import slide5 from "@/assets/slide5.jpg";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type Slide = {
   word: string;
@@ -49,242 +53,150 @@ const SLIDES: Slide[] = [
   },
 ];
 
-const WHEEL_LOCK_MS = 350;
-const MOMENTUM_EXTEND_MS = 300;
-const MOMENTUM_NOISE_DELTA = 3;
-const ENTRY_LOCK_MS = 950;
+type PanelRefs = {
+  img: HTMLDivElement | null;
+  eyebrow: HTMLDivElement | null;
+  word: HTMLHeadingElement | null;
+  dot: HTMLSpanElement | null;
+  caption: HTMLDivElement | null;
+};
+
+const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
 export function AnimatedSections() {
-  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const panelRefs = useRef<PanelRefs[]>(
+    SLIDES.map(() => ({ img: null, eyebrow: null, word: null, dot: null, caption: null })),
+  );
   const [active, setActive] = useState(0);
-  const activeRef = useRef(0);
-  const lockedRef = useRef(false);
-  const pinnedRef = useRef(false);
-  const touchStartY = useRef<number | null>(null);
-  const lockTimerRef = useRef<number | null>(null);
-  const entrySnapTimerRef = useRef<number | null>(null);
-  const releasedDirRef = useRef<1 | -1 | null>(null);
+  const [reduceMotion, setReduceMotion] = useState(false);
+  // Touch devices (and narrow windows) get a native swipeable filmstrip instead
+  // of the scroll-jacked pin: horizontal scroll-jacking fights the browser's own
+  // swipe-back / address-bar gestures on touch, so we hand control back to the
+  // browser there rather than trying to out-tune it.
+  const [compact, setCompact] = useState(false);
 
   useEffect(() => {
-    activeRef.current = active;
-  }, [active]);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const alignSection = (behavior: ScrollBehavior = "auto") => {
-      const rect = el.getBoundingClientRect();
-      if (Math.abs(rect.top) < 1) return;
-      window.scrollTo({ top: window.scrollY + rect.top, behavior });
+    const compactMql = window.matchMedia(
+      "(max-width: 1023px), (hover: none) and (pointer: coarse)",
+    );
+    const reduceMql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      setCompact(compactMql.matches);
+      setReduceMotion(reduceMql.matches);
     };
-
-    const getCatchState = (dir: 1 | -1) => {
-      const rect = el.getBoundingClientRect();
-      const visible = rect.bottom > 0 && rect.top < window.innerHeight;
-      if (!visible) {
-        releasedDirRef.current = null;
-      }
-      return {
-        fromAbove: dir > 0 && rect.top > 1,
-        fromBelow: dir < 0 && rect.bottom < window.innerHeight - 1,
-        shouldCatch:
-          dir > 0
-            ? rect.bottom > 0 && rect.top <= window.innerHeight
-            : rect.top < window.innerHeight && rect.bottom >= 0,
-      };
-    };
-
-    const armLock = (ms = WHEEL_LOCK_MS) => {
-      lockedRef.current = true;
-      if (lockTimerRef.current) {
-        clearTimeout(lockTimerRef.current);
-      }
-      lockTimerRef.current = window.setTimeout(() => {
-        lockedRef.current = false;
-        lockTimerRef.current = null;
-      }, ms);
-    };
-
-    // Called while locked, for wheel events still carrying real momentum
-    // (deltaY above the noise floor). Keeps pushing the unlock out for as
-    // long as the trackpad's momentum genuinely keeps flowing, so a hard
-    // flick can't outlast the lock and trigger a second advance — but once
-    // events decay into the tail-end dribble, we stop extending and let the
-    // lock expire on schedule instead of waiting for total silence.
-    const extendLock = (ms = MOMENTUM_EXTEND_MS) => {
-      if (lockTimerRef.current) {
-        clearTimeout(lockTimerRef.current);
-      }
-      lockTimerRef.current = window.setTimeout(() => {
-        lockedRef.current = false;
-        lockTimerRef.current = null;
-      }, ms);
-    };
-
-    const release = (dir: 1 | -1) => {
-      pinnedRef.current = false;
-      releasedDirRef.current = dir;
-    };
-
-    const tryCatch = (dir: 1 | -1) => {
-      if (pinnedRef.current || lockedRef.current) return false;
-      const catchState = getCatchState(dir);
-      if (!catchState.shouldCatch) return false;
-      if (releasedDirRef.current === dir) return false;
-      releasedDirRef.current = null;
-      pinnedRef.current = true;
-      if (catchState.fromAbove || catchState.fromBelow) {
-        const entrySlide = catchState.fromAbove ? 0 : SLIDES.length - 1;
-        activeRef.current = entrySlide;
-        setActive(entrySlide);
-        alignSection("smooth");
-        armLock(ENTRY_LOCK_MS);
-        if (entrySnapTimerRef.current) {
-          clearTimeout(entrySnapTimerRef.current);
-        }
-        entrySnapTimerRef.current = window.setTimeout(() => {
-          alignSection("auto");
-          entrySnapTimerRef.current = null;
-        }, ENTRY_LOCK_MS);
-        return true;
-      }
-      alignSection("auto");
-      return true;
-    };
-
-    const advance = (dir: 1 | -1) => {
-      if (lockedRef.current) return false;
-      const next = activeRef.current + dir;
-      if (next < 0 || next >= SLIDES.length) return false;
-      activeRef.current = next;
-      setActive(next);
-      armLock();
-      return true;
-    };
-
-    const canAdvance = (dir: 1 | -1) => {
-      const next = activeRef.current + dir;
-      return next >= 0 && next < SLIDES.length;
-    };
-
-    const wheelHandler = (e: WheelEvent) => {
-      const dir: 1 | -1 = e.deltaY > 0 ? 1 : -1;
-
-      if (!pinnedRef.current) {
-        if (tryCatch(dir)) {
-          e.preventDefault();
-          e.stopPropagation();
-          return;
-        }
-        return;
-      }
-
-      if (lockedRef.current) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (Math.abs(e.deltaY) > MOMENTUM_NOISE_DELTA) {
-          extendLock();
-        }
-        return;
-      }
-
-      if (!canAdvance(dir)) {
-        release(dir);
-        return;
-      }
-
-      e.preventDefault();
-      e.stopPropagation();
-      if (advance(dir)) {
-        alignSection();
-      }
-    };
-    const keyHandler = (e: KeyboardEvent) => {
-      let dir: 1 | -1 | 0 = 0;
-      if (["ArrowDown", "PageDown", " "].includes(e.key)) dir = 1;
-      else if (["ArrowUp", "PageUp"].includes(e.key)) dir = -1;
-      if (!dir) return;
-      if (!pinnedRef.current) {
-        if (tryCatch(dir)) e.preventDefault();
-        return;
-      }
-      if (!canAdvance(dir)) {
-        release(dir);
-        return;
-      }
-      e.preventDefault();
-      advance(dir);
-      alignSection();
-    };
-
-    const touchStart = (e: TouchEvent) => {
-      touchStartY.current = e.touches[0]?.clientY ?? null;
-    };
-    const touchMove = (e: TouchEvent) => {
-      if (touchStartY.current == null) return;
-      const dy = touchStartY.current - (e.touches[0]?.clientY ?? 0);
-      const dir: 1 | -1 = dy > 0 ? 1 : -1;
-      if (!pinnedRef.current) {
-        if (tryCatch(dir)) {
-          e.preventDefault();
-          touchStartY.current = null;
-        }
-        return;
-      }
-      if (!canAdvance(dir)) {
-        release(dir);
-        return;
-      }
-      e.preventDefault();
-      if (Math.abs(dy) < 30) return;
-      if (advance(dir)) {
-        touchStartY.current = null;
-        alignSection();
-      }
-    };
-
-    window.addEventListener("wheel", wheelHandler, { passive: false });
-    window.addEventListener("keydown", keyHandler);
-    window.addEventListener("touchstart", touchStart, { passive: true });
-    window.addEventListener("touchmove", touchMove, { passive: false });
-
+    update();
+    compactMql.addEventListener("change", update);
+    reduceMql.addEventListener("change", update);
     return () => {
-      if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
-      if (entrySnapTimerRef.current) clearTimeout(entrySnapTimerRef.current);
-      window.removeEventListener("wheel", wheelHandler);
-      window.removeEventListener("keydown", keyHandler);
-      window.removeEventListener("touchstart", touchStart);
-      window.removeEventListener("touchmove", touchMove);
+      compactMql.removeEventListener("change", update);
+      reduceMql.removeEventListener("change", update);
     };
   }, []);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    const track = trackRef.current;
+    if (!container || !track) return;
+
+    if (compact || reduceMotion) return;
+
+    const panels = panelRefs.current;
+    const lastActive = { current: 0 };
+
+    const applyProgress = (progress: number) => {
+      const raw = progress * (SLIDES.length - 1);
+      const nearest = Math.round(raw);
+      if (nearest !== lastActive.current) {
+        lastActive.current = nearest;
+        setActive(nearest);
+      }
+
+      panels.forEach((p, i) => {
+        const dist = raw - i;
+        const eyebrowT = clamp01(1 - Math.abs(dist) * 1.3);
+        const wordT = clamp01(1 - Math.abs(dist) * 1.6);
+        const captionT = clamp01(1 - Math.abs(dist) * 1.9);
+        const dotT = clamp01(1 - Math.abs(dist) * 2.6);
+        const bounded = Math.max(-1, Math.min(1, dist));
+
+        if (p.eyebrow) gsap.set(p.eyebrow, { opacity: eyebrowT, y: (1 - eyebrowT) * -10 });
+        if (p.word)
+          gsap.set(p.word, { opacity: wordT, y: (1 - wordT) * 40, scale: 0.96 + wordT * 0.04 });
+        if (p.dot) gsap.set(p.dot, { opacity: dotT, scale: 0.6 + dotT * 0.4 });
+        if (p.caption) {
+          gsap.set(p.caption, {
+            opacity: captionT,
+            y: (1 - captionT) * 16,
+            pointerEvents: captionT > 0.5 ? "auto" : "none",
+          });
+        }
+        if (p.img) gsap.set(p.img, { xPercent: bounded * -8, scale: 1 + Math.abs(bounded) * 0.06 });
+      });
+    };
+
+    const ctx = gsap.context(() => {
+      const getTravel = () => SLIDES.length * window.innerWidth - window.innerWidth;
+
+      gsap.to(track, {
+        x: () => -getTravel(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: container,
+          start: "top top",
+          // Pin duration is based on viewport HEIGHT, not width — the x-travel
+          // (getTravel) is a separate, width-based distance. Tying this to
+          // width too would make the scroll-distance balloon on wide desktop
+          // monitors even though the vertical scroll pacing users feel is a
+          // function of viewport height, not width.
+          end: () => `+=${SLIDES.length * window.innerHeight}`,
+          pin: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => applyProgress(self.progress),
+        },
+      });
+
+      applyProgress(0);
+    }, container);
+
+    return () => ctx.revert();
+  }, [compact, reduceMotion]);
+
+  const staticMode = reduceMotion || compact;
+
   return (
-    <div
-      ref={sectionRef}
+    <section
+      ref={containerRef}
       data-hide-nav
       className="relative z-40 h-screen w-full overflow-hidden bg-ink"
       aria-label="Chapters of the day"
     >
-      {SLIDES.map((s, i) => {
-        const revealed = i <= active;
-        const isActive = active === i;
-        const chapterLabel = `CHAPTER 0${i + 1}`;
-        return (
-          <div
-            key={i}
-            className="absolute inset-0 will-change-[clip-path] transition-[clip-path] duration-[900ms] ease-[cubic-bezier(0.77,0,0.175,1)]"
-            style={{
-              zIndex: i + 1,
-              clipPath: revealed ? "inset(0% 0% 0% 0%)" : "inset(100% 0% 0% 0%)",
-            }}
-          >
-            <div className="relative h-full w-full overflow-hidden">
+      <div
+        ref={trackRef}
+        className={`flex h-full w-full ${staticMode ? "overflow-x-auto snap-x snap-mandatory" : ""}`}
+      >
+        {SLIDES.map((s, i) => {
+          const chapterLabel = `CHAPTER 0${i + 1}`;
+          return (
+            <div
+              key={i}
+              className={`relative h-full w-screen shrink-0 overflow-hidden ${
+                staticMode ? "snap-center" : ""
+              }`}
+            >
               {/* Full-bleed photo */}
-              <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${s.image})` }}
-              />
+              <div className="absolute inset-0 overflow-hidden">
+                <div
+                  ref={(el) => {
+                    panelRefs.current[i].img = el;
+                  }}
+                  className="absolute inset-0 bg-cover bg-center will-change-transform"
+                  style={{ backgroundImage: `url(${s.image})` }}
+                />
+              </div>
               {/* Cinematic grade: flat overlay + vignette */}
               <div
                 className="pointer-events-none absolute inset-0"
@@ -302,12 +214,11 @@ export function AnimatedSections() {
               <div className="pointer-events-none absolute inset-x-0 top-8 md:top-10">
                 <div className="mx-auto max-w-[1280px] px-8">
                   <div
-                    className="text-[11px] uppercase tracking-[0.28em] text-white/60 transition-all duration-700"
-                    style={{
-                      opacity: isActive ? 1 : 0,
-                      transform: isActive ? "translateY(0)" : "translateY(-10px)",
-                      transitionDelay: isActive ? "150ms" : "0ms",
+                    ref={(el) => {
+                      panelRefs.current[i].eyebrow = el;
                     }}
+                    className="text-[11px] uppercase tracking-[0.28em] text-white/60 will-change-transform"
+                    style={{ opacity: staticMode ? 1 : i === 0 ? 1 : 0 }}
                   >
                     {chapterLabel} · Edition 04
                   </div>
@@ -321,25 +232,23 @@ export function AnimatedSections() {
               >
                 <div className="mx-auto max-w-[1280px] px-8">
                   <h2
-                    className="font-serif font-medium leading-none tracking-[-0.03em] text-white text-center"
+                    ref={(el) => {
+                      panelRefs.current[i].word = el;
+                    }}
+                    className="font-serif font-medium leading-none tracking-[-0.03em] text-white text-center will-change-transform"
                     style={{
                       fontSize: "clamp(4rem, 12vw, 12rem)",
                       textShadow: "0 4px 60px rgba(0,0,0,0.5)",
-                      opacity: isActive ? 1 : 0,
-                      transform: isActive
-                        ? "translateY(0) scale(1)"
-                        : "translateY(40px) scale(0.96)",
-                      transition: "opacity 700ms ease-out, transform 700ms ease-out",
+                      opacity: staticMode ? 1 : i === 0 ? 1 : 0,
                     }}
                   >
                     {s.word}
                     <span
-                      className="inline-block text-[#D62828]"
-                      style={{
-                        opacity: isActive ? 1 : 0,
-                        transform: isActive ? "scale(1)" : "scale(0.6)",
-                        transition: "opacity 400ms ease-out 900ms, transform 400ms ease-out 900ms",
+                      ref={(el) => {
+                        panelRefs.current[i].dot = el;
                       }}
+                      className="inline-block text-[#D62828] will-change-transform"
+                      style={{ opacity: staticMode ? 1 : i === 0 ? 1 : 0 }}
                     >
                       .
                     </span>
@@ -351,12 +260,11 @@ export function AnimatedSections() {
               <div className="pointer-events-none absolute inset-x-0 bottom-10 md:bottom-12">
                 <div className="mx-auto max-w-[1280px] px-8">
                   <div
-                    className="pointer-events-auto max-w-[560px] transition-all duration-700"
-                    style={{
-                      opacity: isActive ? 1 : 0,
-                      transform: isActive ? "translateY(0)" : "translateY(16px)",
-                      transitionDelay: isActive ? "500ms" : "0ms",
+                    ref={(el) => {
+                      panelRefs.current[i].caption = el;
                     }}
+                    className="pointer-events-auto max-w-[560px] will-change-transform"
+                    style={{ opacity: staticMode ? 1 : i === 0 ? 1 : 0 }}
                   >
                     <div className="mb-4 w-6 bg-[#D62828]" style={{ height: "2px" }} />
                     <p className="text-[18px] leading-[1.5] text-white">{s.line1}</p>
@@ -377,20 +285,22 @@ export function AnimatedSections() {
                 </div>
               </div>
             </div>
-          </div>
-        );
-      })}
-
-      <div className="pointer-events-none absolute right-6 top-1/2 z-50 flex -translate-y-1/2 flex-col gap-3 md:right-10">
-        {SLIDES.map((_, i) => (
-          <span
-            key={i}
-            className={`block w-px transition-all duration-500 ${
-              i === active ? "bg-[#D62828] h-[44px]" : "bg-white/70 h-[22px]"
-            }`}
-          />
-        ))}
+          );
+        })}
       </div>
-    </div>
+
+      {!staticMode && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-6 z-50 flex justify-center gap-3 md:bottom-8">
+          {SLIDES.map((_, i) => (
+            <span
+              key={i}
+              className={`block h-px transition-all duration-500 ${
+                i === active ? "bg-[#D62828] w-[44px]" : "bg-white/70 w-[22px]"
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </section>
   );
 }

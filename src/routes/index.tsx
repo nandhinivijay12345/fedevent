@@ -68,8 +68,8 @@ function Home() {
 /* ───────────── HERO ───────────── */
 function Hero() {
   return (
-    <section data-hero className="relative flex h-screen w-full flex-col bg-white">
-      <div className="mx-auto flex h-full w-full max-w-[1280px] flex-col px-8 pt-28 lg:pt-32">
+    <section data-hero className="relative flex min-h-screen w-full flex-col bg-white lg:h-screen">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-1 flex-col px-8 pt-28 lg:h-full lg:pt-32">
         <div className="grid flex-1 grid-cols-1 items-center gap-10 pb-28 lg:grid-cols-[42fr_58fr] lg:gap-14 lg:pb-32">
           {/* LEFT — content */}
           <div className="relative flex flex-col justify-center">
