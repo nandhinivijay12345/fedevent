@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { sendConfirmationEmail } from "@/lib/notifications.functions";
 import type { SignatureHandle } from "@/components/SignaturePad";
 
 export type IndividualAwardFormState = {
@@ -80,6 +81,14 @@ export function useIndividualAwardForm() {
         authorised: f.authorised,
       });
       if (insertError) throw insertError;
+      void sendConfirmationEmail({
+        data: {
+          to: f.email,
+          subject: "You're confirmed for FED 2026",
+          heading: "See you on the stage!",
+          body: `Hi ${f.your_name}, your spot is locked in for August 24 at IITM Research Park, Chennai. We'll be in touch with arrival details and your on-stage moment soon. Need anything before then? Reach us at +91 82206 06367.`,
+        },
+      }).catch(() => {});
       setDone(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");

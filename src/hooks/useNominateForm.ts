@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { sendConfirmationEmail } from "@/lib/notifications.functions";
 
 export type NominateFormState = {
   school_name: string;
@@ -58,6 +59,14 @@ export function useNominateForm() {
         authorised: f.authorised,
       });
       if (insertError) throw insertError;
+      void sendConfirmationEmail({
+        data: {
+          to: f.email,
+          subject: "We've received your Top 100 nomination — FED 2026",
+          heading: "Nomination received.",
+          body: `Thanks, ${f.your_name}. We've received your nomination for ${f.school_name}. Our team will verify the details against our records and follow up if we need anything else.`,
+        },
+      }).catch(() => {});
       setDone(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
