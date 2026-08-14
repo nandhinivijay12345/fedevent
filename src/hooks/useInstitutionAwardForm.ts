@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { sendConfirmationEmail } from "@/lib/notifications.functions";
+import { sendConfirmationEmail, sendSchoolAwardEmail } from "@/lib/notifications.functions";
 import type { SignatureHandle } from "@/components/SignaturePad";
 
 export type InstitutionTrack = "school" | "organization" | "college";
@@ -215,14 +215,26 @@ export function useInstitutionAwardForm(track: InstitutionTrack) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .insert(payload as any);
       if (insertError) throw insertError;
-      void sendConfirmationEmail({
-        data: {
-          to: f.email,
-          subject: "You're confirmed for FED 2026",
-          heading: "See you on the stage!",
-          body: `Hi ${f.your_name}, your spot for ${f.entity_name} is locked in for August 24 at IITM Research Park, Chennai. We'll be in touch with arrival details and your on-stage moment soon. Need anything before then? Reach us at +91 82206 06367.`,
-        },
-      }).catch(() => {});
+      if (track === "school") {
+        void sendSchoolAwardEmail({
+          data: {
+            to: f.email,
+            recipientName: f.award_recipient_name,
+            schoolName: f.entity_name,
+            studentPasses: f.primary_passes,
+            teacherPasses: f.secondary_passes,
+          },
+        }).catch(() => {});
+      } else {
+        void sendConfirmationEmail({
+          data: {
+            to: f.email,
+            subject: "You're confirmed for FED 2026",
+            heading: "See you on the stage!",
+            body: `Hi ${f.your_name}, your spot for ${f.entity_name} is locked in for August 24 at IITM Research Park, Chennai. We'll be in touch with arrival details and your on-stage moment soon. Need anything before then? Reach us at +91 82206 06367.`,
+          },
+        }).catch(() => {});
+      }
       setDone(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");

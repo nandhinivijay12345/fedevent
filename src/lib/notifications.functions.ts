@@ -36,3 +36,45 @@ export const sendConfirmationEmail = createServerFn({ method: "POST" })
       return { sent: false };
     }
   });
+
+const sendSchoolAwardEmailSchema = z.object({
+  to: z.string().email(),
+  recipientName: z.string().min(1),
+  schoolName: z.string().min(1),
+  studentPasses: z.number().int().min(0),
+  teacherPasses: z.number().int().min(0),
+});
+
+export const sendSchoolAwardEmail = createServerFn({ method: "POST" })
+  .validator((data: unknown) => sendSchoolAwardEmailSchema.parse(data))
+  .handler(async ({ data }) => {
+    const fromEmail = process.env.RESEND_FROM_EMAIL;
+    if (!fromEmail) {
+      console.error(
+        "[Resend] Missing RESEND_FROM_EMAIL environment variable — skipping school award email.",
+      );
+      return { sent: false };
+    }
+
+    try {
+      const { resend } = await import("@/integrations/resend/client.server");
+      const { renderSchoolAwardEmail } = await import("@/lib/emailTemplate.server");
+
+      const { error } = await resend.emails.send({
+        from: `Future of Education <${fromEmail}>`,
+        to: data.to,
+        subject: "You're a Top 100 School — Future of Education 2026",
+        html: renderSchoolAwardEmail({
+          recipientName: data.recipientName,
+          schoolName: data.schoolName,
+          studentPasses: data.studentPasses,
+          teacherPasses: data.teacherPasses,
+        }),
+      });
+      if (error) throw error;
+      return { sent: true };
+    } catch (err) {
+      console.error("[Resend] Failed to send school award email:", err);
+      return { sent: false };
+    }
+  });
