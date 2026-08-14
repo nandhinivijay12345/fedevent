@@ -1,4 +1,4 @@
-function escapeHtml(value: string): string {
+export function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -31,6 +31,106 @@ export function renderConfirmationEmail({
               <td style="padding:32px;">
                 <h1 style="margin:0 0 16px;color:#1B2A5E;font-size:24px;font-weight:600;">${escapeHtml(heading)}</h1>
                 <p style="margin:0;color:#1B2A5E;opacity:0.75;font-size:15px;line-height:1.7;">${escapeHtml(body)}</p>
+                <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(27,42,94,0.1);">
+                  <p style="margin:0;color:#1B2A5E;opacity:0.6;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">
+                    IITM Research Park · Chennai · 24 August 2026
+                  </p>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`.trim();
+}
+
+export function renderSchoolAwardEmail({
+  recipientName,
+  schoolName,
+  studentPasses,
+  teacherPasses,
+}: {
+  recipientName: string;
+  schoolName: string;
+  studentPasses: number;
+  teacherPasses: number;
+}): string {
+  const name = escapeHtml(recipientName);
+  const school = escapeHtml(schoolName);
+  const p = (html: string) =>
+    `<p style="margin:0 0 16px;color:#1B2A5E;opacity:0.8;font-size:15px;line-height:1.7;">${html}</p>`;
+
+  return `
+<!doctype html>
+<html>
+  <body style="margin:0;padding:0;background-color:#F4EDDC;font-family:Georgia,'Times New Roman',serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4EDDC;padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background-color:#ffffff;border-radius:16px;overflow:hidden;">
+            <tr>
+              <td style="background-color:#1B2A5E;padding:28px 32px;">
+                <span style="color:#ffffff;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Future of Education &mdash; Edition 4</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:36px 32px;">
+                <p style="margin:0 0 20px;color:#1B2A5E;font-size:15px;line-height:1.7;">Dear ${name},</p>
+
+                <h1 style="margin:0 0 20px;color:#1B2A5E;font-size:22px;line-height:1.4;font-weight:600;">Congratulations on being recognised as one of the Top 100 Schools shaping the future of education!</h1>
+
+                ${p(`We are proud to celebrate <strong>${school}</strong> as a recipient of the <strong>Top 100 Schools Award</strong> at the <strong>Future of Education Conference &ndash; Edition 4</strong>.`)}
+
+                ${p(`This recognition is a celebration of schools that are not simply responding to the changing world, but are <strong>reimagining what education can be</strong> &mdash; through bold leadership, meaningful innovation, and an unwavering commitment to their learners.`)}
+
+                ${p(`Your school's work has earned its place among a distinguished community of institutions being recognised for their contribution to the future of education.`)}
+
+                <h2 style="margin:28px 0 16px;color:#1B2A5E;font-size:17px;font-weight:600;">We look forward to celebrating you at Future of Education 2026</h2>
+
+                ${p(`Your registration is confirmed for the conference, with:`)}
+
+                <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 24px;background-color:#F4EDDC;border-radius:10px;">
+                  <tr>
+                    <td style="padding:16px 20px;color:#1B2A5E;font-size:14px;line-height:1.9;">
+                      <strong>Student Passes:</strong> ${studentPasses}<br/>
+                      <strong>Teacher Passes:</strong> ${teacherPasses}
+                    </td>
+                  </tr>
+                </table>
+
+                <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 24px;">
+                  <tr>
+                    <td style="padding:4px 0;color:#1B2A5E;font-size:14px;">&#128197; <strong>Date:</strong> August 24, 2026</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 0;color:#1B2A5E;font-size:14px;">&#128341; <strong>Time:</strong> 10:00 AM onwards</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 0;color:#1B2A5E;font-size:14px;">&#128205; <strong>Venue:</strong> D7 Auditorium, IIT Madras Research Park, Chennai</td>
+                  </tr>
+                </table>
+
+                ${p(`As an <strong>Award Recipient</strong>, you will receive a <strong>VIP Badge</strong> and have access to <strong>designated VIP seating</strong> during the conference and award ceremony.`)}
+
+                ${p(`Your students and teachers will receive their respective badges and be seated in the <strong>designated student and teacher seating areas</strong> according to the conference seating arrangement.`)}
+
+                ${p(`The award will be presented during the conference, bringing together school leaders, educators, policymakers, entrepreneurs, and education innovators from across the ecosystem.`)}
+
+                ${p(`It will be a day of <strong>ideas, conversations, recognition, and celebration</strong> &mdash; and we are delighted that your school will be part of it.`)}
+
+                ${p(`We look forward to welcoming you and your team and celebrating this important achievement with you.`)}
+
+                <p style="margin:0 0 24px;color:#1B2A5E;font-size:15px;line-height:1.7;font-style:italic;">Congratulations once again on being named among the Top 100 Schools. We look forward to seeing your school take its place on the Future of Education stage.</p>
+
+                <p style="margin:0;color:#1B2A5E;font-size:15px;line-height:1.6;">
+                  Warm regards,<br/>
+                  <strong>Nandhini Vijay</strong><br/>
+                  Director<br/>
+                  Future of Education &ndash; Edition 4
+                </p>
+
                 <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(27,42,94,0.1);">
                   <p style="margin:0;color:#1B2A5E;opacity:0.6;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">
                     IITM Research Park · Chennai · 24 August 2026
