@@ -320,7 +320,7 @@ export function InstitutionAwardFields({
             <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#1B2A5E]/70">
               {copy.recipientPrompt}
             </div>
-            <label className="mt-3 flex cursor-pointer items-start gap-3">
+            <label className="mt-3 flex cursor-pointer items-start gap-3 py-2 -my-2">
               <input
                 type="checkbox"
                 checked={f.award_recipient_same_as_filler}
@@ -374,7 +374,7 @@ export function InstitutionAwardFields({
 
         <Chapter n={c5.n} label={c5.label} innerRef={(el) => (chapterRefs.current[4] = el)}>
           <SignaturePad onRegister={(h) => (sig.current = h)} />
-          <label className="flex cursor-pointer items-start gap-3">
+          <label className="flex cursor-pointer items-start gap-3 py-2 -my-2">
             <input
               type="checkbox"
               checked={f.authorised}
@@ -517,7 +517,7 @@ export function IndividualAwardFields({
 
         <Chapter n={c4.n} label={c4.label} innerRef={(el) => (chapterRefs.current[3] = el)}>
           <SignaturePad onRegister={(h) => (sig.current = h)} />
-          <label className="flex cursor-pointer items-start gap-3">
+          <label className="flex cursor-pointer items-start gap-3 py-2 -my-2">
             <input
               type="checkbox"
               checked={f.authorised}
@@ -588,7 +588,7 @@ export function NominationFields({ f, set, error, loading, submit }: NominationF
         value={f.link}
         onChange={(v) => set("link", v)}
       />
-      <label className="flex cursor-pointer items-start gap-3 pt-2">
+      <label className="flex cursor-pointer items-start gap-3 pt-2 pb-2 -mb-2">
         <input
           type="checkbox"
           checked={f.authorised}
@@ -663,7 +663,7 @@ export function ParticipationFields({ f, set, error, loading, submit }: Particip
         value={f.note}
         onChange={(v) => set("note", v)}
       />
-      <label className="flex cursor-pointer items-start gap-3 pt-2">
+      <label className="flex cursor-pointer items-start gap-3 pt-2 pb-2 -mb-2">
         <input
           type="checkbox"
           checked={f.updates_opt_in}
