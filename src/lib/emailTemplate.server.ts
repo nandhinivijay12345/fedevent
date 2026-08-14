@@ -112,7 +112,7 @@ export function renderSchoolAwardEmail({
                   </tr>
                 </table>
 
-                ${p(`As an <strong>Award Recipient</strong>, you will receive a <strong>VIP Badge</strong> and have access to <strong>designated VIP seating</strong> during the conference and award ceremony.`)}
+                ${p(`The <strong>Award Recipient</strong> will receive a <strong>VIP Badge</strong> and have access to <strong>designated VIP seating</strong> during the conference and award ceremony.`)}
 
                 ${p(`Your students and teachers will receive their respective badges and be seated in the <strong>designated student and teacher seating areas</strong> according to the conference seating arrangement.`)}
 
