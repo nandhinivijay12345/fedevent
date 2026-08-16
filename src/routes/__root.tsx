@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import faviconUrl from "../assets/FED LOGO_FAV.png";
+import heroFallback from "../assets/hero-panel.jpg";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -78,14 +79,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Future of Education 2026 — Edition 04 · IIT Madras" },
+      {
+        name: "description",
+        content:
+          "India's largest gathering of educators, innovators and changemakers. One day. One stage. One conversation shaping what comes next. 24 August · IIT Madras.",
+      },
+      { name: "author", content: "Future of Education" },
+      { property: "og:title", content: "Future of Education 2026 — Edition 04" },
+      {
+        property: "og:description",
+        content:
+          "One day. One stage. One conversation shaping what comes next. 24 August · IIT Madras.",
+      },
+      { property: "og:image", content: heroFallback },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:image", content: heroFallback },
     ],
     links: [
       {

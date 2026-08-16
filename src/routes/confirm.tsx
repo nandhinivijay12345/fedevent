@@ -30,7 +30,21 @@ export const Route = createFileRoute("/confirm")({
   head: () => ({
     meta: [
       { title: "Awardee Registration — FED 2026" },
-      { name: "description", content: "Register for the Individual, School, Organization, or College/University Award at FED 2026 · 24 August · IITM Research Park, Chennai." },
+      {
+        name: "description",
+        content:
+          "Register for the Individual, School, Organization, or College/University Award at FED 2026 · 24 August · IITM Research Park, Chennai.",
+      },
+      { property: "og:title", content: "Awardee Registration — FED 2026" },
+      {
+        property: "og:description",
+        content:
+          "Register for the Individual, School, Organization, or College/University Award at FED 2026 · 24 August · IITM Research Park, Chennai.",
+      },
+      { property: "og:image", content: confirmStageCollage },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: confirmStageCollage },
     ],
   }),
   component: ConfirmPage,
