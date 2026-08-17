@@ -31,7 +31,7 @@ export function HeroCountdown() {
         <span className="inline-block h-[5px] w-[5px] rounded-full bg-[#D62828]" />
         Doors open in
       </div>
-      <div className="flex items-baseline gap-4" suppressHydrationWarning>
+      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2" suppressHydrationWarning>
         {cells.map((c, i) => (
           <div key={c.l} className="flex items-baseline gap-4">
             {i > 0 && <span className="h-5 w-px self-center bg-[#1B2A5E]/20" />}

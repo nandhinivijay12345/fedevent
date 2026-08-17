@@ -63,6 +63,10 @@ type PanelRefs = {
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
+// Extra scroll distance (in viewport heights) the pin holds after the final
+// slide reaches full opacity, before unpinning.
+const HOLD_VH = 1;
+
 export function AnimatedSections() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -132,16 +136,30 @@ export function AnimatedSections() {
             pointerEvents: captionT > 0.5 ? "auto" : "none",
           });
         }
-        if (p.img) gsap.set(p.img, { xPercent: bounded * -8, scale: 1 + Math.abs(bounded) * 0.06 });
+        // scale's overhang (half the growth, per side) must stay >= |xPercent|
+        // or the translated image runs out of coverage and the section's dark
+        // bg-ink shows through the gap at the trailing edge.
+        if (p.img) gsap.set(p.img, { xPercent: bounded * -4, scale: 1 + Math.abs(bounded) * 0.12 });
       });
     };
 
     const ctx = gsap.context(() => {
       const getTravel = () => SLIDES.length * window.innerWidth - window.innerWidth;
+      const getActiveVh = () => SLIDES.length * window.innerHeight;
+      // Interior slides get dwell time on both sides of their peak (raw
+      // approaches, then moves past). The last slide only ever gets the
+      // "approach" half — raw caps out exactly when progress hits 1, which
+      // is also exactly when the pin's `end` is reached. Without a trailing
+      // hold zone, Crown reaches full opacity at the same scroll position
+      // where the section unpins, so scroll momentum alone sweeps it away.
+      // HOLD_VH adds scroll distance where progress/track position are
+      // clamped at their final values, giving the last slide real dwell time.
+      const getPinVh = () => getActiveVh() + HOLD_VH * window.innerHeight;
+      const holdEase = (p: number) => Math.min(1, p / (getActiveVh() / getPinVh()));
 
       gsap.to(track, {
         x: () => -getTravel(),
-        ease: "none",
+        ease: holdEase,
         scrollTrigger: {
           trigger: container,
           start: "top top",
@@ -150,12 +168,12 @@ export function AnimatedSections() {
           // width too would make the scroll-distance balloon on wide desktop
           // monitors even though the vertical scroll pacing users feel is a
           // function of viewport height, not width.
-          end: () => `+=${SLIDES.length * window.innerHeight}`,
+          end: () => `+=${getPinVh()}`,
           pin: true,
           scrub: 0.6,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          onUpdate: (self) => applyProgress(self.progress),
+          onUpdate: (self) => applyProgress(holdEase(self.progress)),
         },
       });
 

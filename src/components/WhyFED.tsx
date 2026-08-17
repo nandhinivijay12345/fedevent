@@ -39,6 +39,7 @@ const WHEEL_LOCK_MS = 350;
 const MOMENTUM_EXTEND_MS = 300;
 const MOMENTUM_NOISE_DELTA = 3;
 const ENTRY_LOCK_MS = 950;
+const NEAR_ENTRY_PX = 24;
 
 export function WhyFED() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -114,6 +115,19 @@ export function WhyFED() {
       pinnedRef.current = true;
       iRef.current = 0;
       setI(0);
+
+      // A tiny gap here is just leftover momentum from the section above
+      // finishing its own scroll — the section is effectively already
+      // settled, so snap instantly and use the normal short lock. Only a
+      // genuine long gap (the user flung past without ever settling here)
+      // gets the smooth realign + long entry lock, since that's an actual
+      // programmatic scroll fighting nothing.
+      if (rect.top <= NEAR_ENTRY_PX) {
+        align("auto");
+        armLock();
+        return true;
+      }
+
       align("smooth");
       armLock(ENTRY_LOCK_MS);
       if (entrySnapTimerRef.current) {
@@ -237,7 +251,7 @@ export function WhyFED() {
               className="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
               style={{
                 opacity: idx === i ? 1 : 0,
-                objectPosition: idx === 1 ? "center 20%" : idx === 2 ? "30% center" : "center",
+                objectPosition: idx === 1 ? "center 20%" : idx === 2 ? "30% 15%" : "center",
               }}
             />
           ))}

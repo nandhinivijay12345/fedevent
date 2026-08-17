@@ -73,14 +73,14 @@ export function Nav() {
         <div className="flex shrink-0 items-center justify-self-end gap-6">
           <Link
             to="/participate"
-            className="group relative hidden whitespace-nowrap py-2 text-[13px] font-medium tracking-wide text-navy/70 transition-colors hover:text-navy sm:inline-flex"
+            className="group relative hidden whitespace-nowrap py-2 text-[13px] font-medium tracking-wide text-navy/70 transition-colors hover:text-navy xl:inline-flex"
           >
             Attendee Registration
             <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-red transition-transform duration-300 ease-out group-hover:scale-x-100" />
           </Link>
           <Link
             to="/confirm"
-            className="hidden items-center whitespace-nowrap rounded-full bg-red px-5 py-2.5 text-[12.5px] font-medium tracking-wide text-white transition-all duration-300 hover:scale-[1.02] hover:bg-red-deep hover:shadow-[0_10px_30px_-12px_rgba(229,57,53,0.55)] sm:inline-flex"
+            className="hidden items-center whitespace-nowrap rounded-full bg-red px-5 py-2.5 text-[12.5px] font-medium tracking-wide text-white transition-all duration-300 hover:scale-[1.02] hover:bg-red-deep hover:shadow-[0_10px_30px_-12px_rgba(229,57,53,0.55)] xl:inline-flex"
           >
             Awardee Registration
           </Link>
