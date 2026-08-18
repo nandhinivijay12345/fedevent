@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   sendCollegeAwardEmail,
-  sendConfirmationEmail,
+  sendOrganizationAwardEmail,
   sendSchoolAwardEmail,
 } from "@/lib/notifications.functions";
 import type { SignatureHandle } from "@/components/SignaturePad";
@@ -241,12 +241,14 @@ export function useInstitutionAwardForm(track: InstitutionTrack) {
           },
         }).catch(() => {});
       } else {
-        void sendConfirmationEmail({
+        void sendOrganizationAwardEmail({
           data: {
             to: f.email,
-            subject: "You're confirmed for FED 2026",
-            heading: "See you on the stage!",
-            body: `Hi ${f.your_name}, your spot for ${f.entity_name} is locked in for August 24 at IITM Research Park, Chennai. We'll be in touch with arrival details and your on-stage moment soon. Need anything before then? Reach us at +91 82206 06367.`,
+            fillerName: f.your_name,
+            recipientName: f.award_recipient_name,
+            recipientDesignation: f.award_recipient_designation,
+            organizationName: f.entity_name,
+            teamPasses: f.primary_passes,
           },
         }).catch(() => {});
       }
