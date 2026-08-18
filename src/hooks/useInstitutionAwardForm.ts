@@ -1,7 +1,11 @@
 import { useRef, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { sendConfirmationEmail, sendSchoolAwardEmail } from "@/lib/notifications.functions";
+import {
+  sendCollegeAwardEmail,
+  sendConfirmationEmail,
+  sendSchoolAwardEmail,
+} from "@/lib/notifications.functions";
 import type { SignatureHandle } from "@/components/SignaturePad";
 
 export type InstitutionTrack = "school" | "organization" | "college";
@@ -223,6 +227,17 @@ export function useInstitutionAwardForm(track: InstitutionTrack) {
             schoolName: f.entity_name,
             studentPasses: f.primary_passes,
             teacherPasses: f.secondary_passes,
+          },
+        }).catch(() => {});
+      } else if (track === "college") {
+        void sendCollegeAwardEmail({
+          data: {
+            to: f.email,
+            recipientName: f.award_recipient_name,
+            recipientDesignation: f.award_recipient_designation,
+            institutionName: f.entity_name,
+            studentPasses: f.primary_passes,
+            facultyPasses: f.secondary_passes,
           },
         }).catch(() => {});
       } else {

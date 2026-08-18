@@ -79,6 +79,50 @@ export const sendSchoolAwardEmail = createServerFn({ method: "POST" })
     }
   });
 
+const sendCollegeAwardEmailSchema = z.object({
+  to: z.string().email(),
+  recipientName: z.string().min(1),
+  recipientDesignation: z.string().min(1),
+  institutionName: z.string().min(1),
+  studentPasses: z.number().int().min(0),
+  facultyPasses: z.number().int().min(0),
+});
+
+export const sendCollegeAwardEmail = createServerFn({ method: "POST" })
+  .validator((data: unknown) => sendCollegeAwardEmailSchema.parse(data))
+  .handler(async ({ data }) => {
+    const fromEmail = process.env.RESEND_FROM_EMAIL;
+    if (!fromEmail) {
+      console.error(
+        "[Resend] Missing RESEND_FROM_EMAIL environment variable — skipping college award email.",
+      );
+      return { sent: false };
+    }
+
+    try {
+      const { resend } = await import("@/integrations/resend/client.server");
+      const { renderCollegeAwardEmail } = await import("@/lib/emailTemplate.server");
+
+      const { error } = await resend.emails.send({
+        from: `Future of Education <${fromEmail}>`,
+        to: data.to,
+        subject: "You're a Future of Education Award Recipient — Edition 4",
+        html: renderCollegeAwardEmail({
+          recipientName: data.recipientName,
+          recipientDesignation: data.recipientDesignation,
+          institutionName: data.institutionName,
+          studentPasses: data.studentPasses,
+          facultyPasses: data.facultyPasses,
+        }),
+      });
+      if (error) throw error;
+      return { sent: true };
+    } catch (err) {
+      console.error("[Resend] Failed to send college award email:", err);
+      return { sent: false };
+    }
+  });
+
 const sendIndividualAwardEmailSchema = z.object({
   to: z.string().email(),
   recipientName: z.string().min(1),
