@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { sendConfirmationEmail } from "@/lib/notifications.functions";
+import { sendAttendeeEmail } from "@/lib/notifications.functions";
 
 export type ParticipationFormState = {
   full_name: string;
@@ -68,12 +68,11 @@ export function useParticipationForm() {
         updates_opt_in: f.updates_opt_in,
       });
       if (insertError) throw insertError;
-      void sendConfirmationEmail({
+      void sendAttendeeEmail({
         data: {
           to: f.email,
-          subject: "You're registered for FED 2026",
-          heading: "See you on the stage!",
-          body: `Hi ${f.full_name}, your spot is locked in for August 24 at IITM Research Park, Chennai. Confirmation details are on their way. Need anything before then? Reach us at +91 82206 06367.`,
+          name: f.full_name,
+          guestCount: f.guest_count,
         },
       }).catch(() => {});
       setDone(true);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ConfirmAttendanceModal, NominateModal } from "./FormModals";
+import { ConfirmAttendanceModal } from "./FormModals";
 import { MODAL_EVENT, type ModalKind } from "@/lib/modal-bus";
 
 export function ModalRoot() {
@@ -12,10 +12,5 @@ export function ModalRoot() {
     window.addEventListener(MODAL_EVENT, handler);
     return () => window.removeEventListener(MODAL_EVENT, handler);
   }, []);
-  return (
-    <>
-      <ConfirmAttendanceModal open={open === "confirm"} onClose={() => setOpen(null)} />
-      <NominateModal open={open === "nominate"} onClose={() => setOpen(null)} />
-    </>
-  );
+  return <ConfirmAttendanceModal open={open === "confirm"} onClose={() => setOpen(null)} />;
 }

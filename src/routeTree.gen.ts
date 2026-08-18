@@ -9,14 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ConfirmRouteImport } from './routes/confirm'
-import { Route as NominateRouteImport } from './routes/nominate'
 import { Route as ParticipateRouteImport } from './routes/participate'
+import { Route as ConfirmRouteImport } from './routes/confirm'
+import { Route as IndexRouteImport } from './routes/index'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ParticipateRoute = ParticipateRouteImport.update({
+  id: '/participate',
+  path: '/participate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConfirmRoute = ConfirmRouteImport.update({
@@ -24,58 +23,49 @@ const ConfirmRoute = ConfirmRouteImport.update({
   path: '/confirm',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NominateRoute = NominateRouteImport.update({
-  id: '/nominate',
-  path: '/nominate',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ParticipateRoute = ParticipateRouteImport.update({
-  id: '/participate',
-  path: '/participate',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/confirm': typeof ConfirmRoute
-  '/nominate': typeof NominateRoute
   '/participate': typeof ParticipateRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/confirm': typeof ConfirmRoute
-  '/nominate': typeof NominateRoute
   '/participate': typeof ParticipateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/confirm': typeof ConfirmRoute
-  '/nominate': typeof NominateRoute
   '/participate': typeof ParticipateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/confirm' | '/nominate' | '/participate'
+  fullPaths: '/' | '/confirm' | '/participate'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/confirm' | '/nominate' | '/participate'
-  id: '__root__' | '/' | '/confirm' | '/nominate' | '/participate'
+  to: '/' | '/confirm' | '/participate'
+  id: '__root__' | '/' | '/confirm' | '/participate'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ConfirmRoute: typeof ConfirmRoute
-  NominateRoute: typeof NominateRoute
   ParticipateRoute: typeof ParticipateRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/participate': {
+      id: '/participate'
+      path: '/participate'
+      fullPath: '/participate'
+      preLoaderRoute: typeof ParticipateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/confirm': {
@@ -85,18 +75,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfirmRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/nominate': {
-      id: '/nominate'
-      path: '/nominate'
-      fullPath: '/nominate'
-      preLoaderRoute: typeof NominateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/participate': {
-      id: '/participate'
-      path: '/participate'
-      fullPath: '/participate'
-      preLoaderRoute: typeof ParticipateRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -105,7 +88,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConfirmRoute: ConfirmRoute,
-  NominateRoute: NominateRoute,
   ParticipateRoute: ParticipateRoute,
 }
 export const routeTree = rootRouteImport
