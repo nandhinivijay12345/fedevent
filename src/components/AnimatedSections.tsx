@@ -104,7 +104,33 @@ export function AnimatedSections() {
     const track = trackRef.current;
     if (!container || !track) return;
 
-    if (compact || reduceMotion) return;
+    if (compact || reduceMotion) {
+      // On mount, this effect can run once with the stale `compact: false`
+      // default before the media-query check corrects it — that transient
+      // run drives GSAP to set inline opacity/transform on off-screen
+      // slides. When compact flips true, gsap.context's cleanup reverts to
+      // that stale value *after* React re-commits the "show everything"
+      // style for static mode, permanently stomping it (GSAP never runs
+      // again to fix it here). Clear only the exact props GSAP's applyProgress
+      // sets above — `clearProps: "all"` would wipe the *entire* inline style
+      // attribute, including the img's React-set backgroundImage and the
+      // word's fontSize/textShadow, not just what GSAP touched.
+      const panels = panelRefs.current;
+      const textNodes = panels.flatMap((p) => [p.eyebrow, p.word, p.dot, p.caption]).filter(Boolean);
+      const imgNodes = panels.map((p) => p.img).filter(Boolean);
+      if (textNodes.length) gsap.set(textNodes, { clearProps: "opacity,y,scale,pointerEvents" });
+      if (imgNodes.length) gsap.set(imgNodes, { clearProps: "xPercent,scale" });
+
+      // Native swipe has no scroll-linked progress to drive the pagination
+      // dots, so track which slide is centered directly off scrollLeft.
+      const onScroll = () => {
+        const i = Math.round(track.scrollLeft / track.clientWidth);
+        setActive(Math.max(0, Math.min(SLIDES.length - 1, i)));
+      };
+      onScroll();
+      track.addEventListener("scroll", onScroll, { passive: true });
+      return () => track.removeEventListener("scroll", onScroll);
+    }
 
     const panels = panelRefs.current;
     const lastActive = { current: 0 };
@@ -307,18 +333,20 @@ export function AnimatedSections() {
         })}
       </div>
 
-      {!staticMode && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-6 z-50 flex justify-center gap-3 md:bottom-8">
-          {SLIDES.map((_, i) => (
-            <span
-              key={i}
-              className={`block h-px transition-all duration-500 ${
-                i === active ? "bg-[#D62828] w-[44px]" : "bg-white/70 w-[22px]"
-              }`}
-            />
-          ))}
-        </div>
-      )}
+      <div
+        className={`pointer-events-none absolute inset-x-0 z-50 flex justify-center gap-3 ${
+          staticMode ? "top-8 md:top-10" : "bottom-6 md:bottom-8"
+        }`}
+      >
+        {SLIDES.map((_, i) => (
+          <span
+            key={i}
+            className={`block h-px transition-all duration-500 ${
+              i === active ? "bg-[#D62828] w-[44px]" : "bg-white/70 w-[22px]"
+            }`}
+          />
+        ))}
+      </div>
     </section>
   );
 }

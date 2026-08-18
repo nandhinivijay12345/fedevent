@@ -13,6 +13,8 @@ import prince from "@/assets/prince.png";
 import kabali from "@/assets/kabali.png";
 import ckKumaravel from "@/assets/ckkumaravel.png";
 import meenakshi from "@/assets/meenakshi.png";
+import benjamin from "@/assets/benjamin.png";
+import gloria from "@/assets/gloria.png";
 
 type Panelist = { name: string; title: string; org: string; image?: string; aspect: string };
 
@@ -21,18 +23,20 @@ type Panelist = { name: string; title: string; org: string; image?: string; aspe
 // landscape crops (4/3) are mixed in for real editorial weight, not just
 // varying degrees of "tall".
 const PANELISTS: Panelist[] = [
+  { name: "Dr. Mohanalakshmi", title: "Founder", org: "American World School", image: mohanalakshmi, aspect: "1 / 1" },
   { name: "Dr. Mark Naufel", title: "President", org: "University of Silicon Valley - California", image: markNoufel, aspect: "4 / 5" },
   { name: "Dr. Margaret", title: "International Vice President", org: "Western Association of Schools and Colleges - California", image: margaret, aspect: "3 / 4" },
   { name: "Bill Muirhead", title: "Managing Director", org: "Peter Jones Foundation", image: bill, aspect: "4 / 3" },
   { name: "Dr. Meenakshi Ramesh", title: "Director – Academics, Curriculum, Research and Development", org: "Vels Group of Schools", image: meenakshi, aspect: "4 / 5" },
-  { name: "Dr. Mohanalakshmi", title: "Founder", org: "American World School", image: mohanalakshmi, aspect: "1 / 1" },
-  { name: "Paul Montague", title: "Chief Executive Officer", org: "Go Early College", image: paul, aspect: "1 / 1" },
+  { name: "Paul Montague", title: "Chief Executive Officer", org: "Go Early College", image: paul, aspect: "4 / 5" },
   { name: "Dr. Vimala Rani Britto", title: "Founder", org: "Fefdy Curriculum", image: vimala, aspect: "4 / 3" },
-  { name: "Nawabzada Mohamed Asif Ali", title: "Prince of Arcot", org: "", image: prince, aspect: "4 / 5" },
+  { name: "Nawabzada Mohamed Asif Ali", title: "Prince of Arcot Dewan", org: "", image: prince, aspect: "4 / 5" },
   { name: "Dr. Madhan Karky", title: "Founder & Managing Director", org: "Karky Tamil Academy", image: madhan, aspect: "3 / 4" },
   { name: "Dr. Bhavanishankar", title: "Director - Strategy, Research and Innovation", org: "Omega Schools", image: bhavanishankar, aspect: "1 / 1" },
-  { name: "Dr. Kabaly P Subramanian", title: "Senior Academic", org: "Arab Open University, Oman", image: kabali, aspect: "1 / 1" },
+  { name: "Dr. Kabaly P Subramanian", title: "Senior Academic", org: "Arab Open University, Oman", image: kabali, aspect: "3 / 4" },
   { name: "CK Kumaravel", title: "Co-founder & CMD", org: "Naturals Salon & Spa", image: ckKumaravel, aspect: "3 / 4" },
+  { name: "Benjamin J. Abott", title: "Chief of American Citizens Services", org: "U.S. Consulate General Chennai", image: benjamin, aspect: "4 / 5" },
+  { name: "Gloria Brown", title: "Founder", org: "La Senda Global Academy", image: gloria, aspect: "3 / 4" },
 ];
 
 
@@ -52,7 +56,7 @@ function SpeakerCard({ p, delay, onOpen }: { p: Panelist; delay: number; onOpen:
               src={p.image}
               alt={p.name}
               loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover grayscale contrast-[1.05] transition-all duration-500 ease-out group-hover:grayscale-0 group-hover:scale-[1.02]"
+              className="absolute inset-0 h-full w-full object-cover contrast-[1.05] transition-all duration-500 ease-out lg:grayscale lg:group-hover:grayscale-0 lg:group-hover:scale-[1.02]"
               style={{ objectPosition: "50% 18%" }}
             />
           </div>
@@ -103,7 +107,7 @@ export function Voices() {
             </h2>
           </div>
           <div className="text-[12px] uppercase tracking-[0.22em] text-[#6b7699]">
-            12 Speakers · More Announced Soon
+            14 Speakers · More Announced Soon
           </div>
         </div>
 
@@ -118,7 +122,7 @@ export function Voices() {
         </div>
 
         <div className="mt-16 hidden gap-x-10 sm:flex lg:hidden">
-          {[PANELISTS.slice(0, 6), PANELISTS.slice(6, 12)].map((col, ci) => (
+          {[PANELISTS.slice(0, 7), PANELISTS.slice(7, 14)].map((col, ci) => (
             <div key={ci} className="flex flex-1 flex-col">
               {col.map((p, i) => (
                 <SpeakerCard key={p.name} p={p} delay={i === 0 ? ci * 100 : 0} onOpen={() => setActive(p)} />
@@ -128,7 +132,7 @@ export function Voices() {
         </div>
 
         <div className="mt-16 hidden gap-x-10 lg:flex">
-          {[PANELISTS.slice(0, 4), PANELISTS.slice(4, 8), PANELISTS.slice(8, 12)].map((col, ci) => (
+          {[PANELISTS.slice(0, 5), PANELISTS.slice(5, 10), PANELISTS.slice(10, 14)].map((col, ci) => (
             <div key={ci} className="flex flex-1 flex-col">
               {col.map((p, i) => (
                 <SpeakerCard key={p.name} p={p} delay={i === 0 ? ci * 100 : 0} onOpen={() => setActive(p)} />
