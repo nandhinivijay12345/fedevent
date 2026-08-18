@@ -78,3 +78,43 @@ export const sendSchoolAwardEmail = createServerFn({ method: "POST" })
       return { sent: false };
     }
   });
+
+const sendIndividualAwardEmailSchema = z.object({
+  to: z.string().email(),
+  recipientName: z.string().min(1),
+  organisation: z.string().min(1),
+  guestPasses: z.number().int().min(0),
+});
+
+export const sendIndividualAwardEmail = createServerFn({ method: "POST" })
+  .validator((data: unknown) => sendIndividualAwardEmailSchema.parse(data))
+  .handler(async ({ data }) => {
+    const fromEmail = process.env.RESEND_FROM_EMAIL;
+    if (!fromEmail) {
+      console.error(
+        "[Resend] Missing RESEND_FROM_EMAIL environment variable — skipping individual award email.",
+      );
+      return { sent: false };
+    }
+
+    try {
+      const { resend } = await import("@/integrations/resend/client.server");
+      const { renderIndividualAwardEmail } = await import("@/lib/emailTemplate.server");
+
+      const { error } = await resend.emails.send({
+        from: `Future of Education <${fromEmail}>`,
+        to: data.to,
+        subject: "You're an Educator of the Year — Future of Education 2026",
+        html: renderIndividualAwardEmail({
+          recipientName: data.recipientName,
+          organisation: data.organisation,
+          guestPasses: data.guestPasses,
+        }),
+      });
+      if (error) throw error;
+      return { sent: true };
+    } catch (err) {
+      console.error("[Resend] Failed to send individual award email:", err);
+      return { sent: false };
+    }
+  });
