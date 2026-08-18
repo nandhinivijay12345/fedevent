@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { LineField, LineSelect, PhoneField, Stepper, SubmitPill, TextAreaField } from "./Modal";
 import { SignaturePad } from "./SignaturePad";
 import type { InstitutionTrack, useInstitutionAwardForm } from "@/hooks/useInstitutionAwardForm";
-import type { useNominateForm } from "@/hooks/useNominateForm";
 import type { useIndividualAwardForm } from "@/hooks/useIndividualAwardForm";
 import type { useParticipationForm } from "@/hooks/useParticipationForm";
 
@@ -532,75 +531,6 @@ export function IndividualAwardFields({
           <SubmitPill loading={loading}>Confirm Registration</SubmitPill>
         </Chapter>
       </div>
-    </form>
-  );
-}
-
-type NominationFieldsProps = Pick<
-  ReturnType<typeof useNominateForm>,
-  "f" | "set" | "error" | "loading" | "submit"
->;
-
-export function NominationFields({ f, set, error, loading, submit }: NominationFieldsProps) {
-  return (
-    <form onSubmit={submit} className="space-y-6">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <LineField label="School Name" name="school_name" required value={f.school_name} onChange={(v) => set("school_name", v)} />
-        <LineField label="City" name="city" required value={f.city} onChange={(v) => set("city", v)} />
-      </div>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <LineField label="Your Name" name="your_name" required value={f.your_name} onChange={(v) => set("your_name", v)} />
-        <LineField label="Designation" name="designation" required value={f.designation} onChange={(v) => set("designation", v)} />
-      </div>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <LineField label="Official Email" name="email" type="email" inputMode="email" required value={f.email} onChange={(v) => set("email", v)} />
-        <PhoneField
-          label="Phone"
-          codeValue={f.phone_country_code}
-          onCodeChange={(v) => set("phone_country_code", v)}
-          phoneValue={f.phone}
-          onPhoneChange={(v) => set("phone", v)}
-        />
-      </div>
-      <div>
-        <label className="block">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#1B2A5E]/70">
-            Why does this school belong in India's Top 100? <span className="text-[#D62828]">*</span>
-          </span>
-          <textarea
-            required
-            maxLength={300}
-            rows={4}
-            value={f.reason}
-            onChange={(e) => set("reason", e.target.value)}
-            className="mt-2 block w-full resize-none border-0 border-b border-[#1B2A5E]/20 bg-transparent px-0 py-2 text-[15px] text-[#1B2A5E] outline-none focus:border-[#1B2A5E] focus:ring-0"
-          />
-          <div className="mt-1 text-right text-[11px] text-[#1B2A5E]/50 tabular-nums">
-            {f.reason.length} / 300
-          </div>
-        </label>
-      </div>
-      <LineField
-        label="Website or achievement link"
-        name="link"
-        type="url"
-        placeholder="https://"
-        value={f.link}
-        onChange={(v) => set("link", v)}
-      />
-      <label className="flex cursor-pointer items-start gap-3 pt-2 pb-2 -mb-2">
-        <input
-          type="checkbox"
-          checked={f.authorised}
-          onChange={(e) => set("authorised", e.target.checked)}
-          className="mt-1 h-4 w-4 accent-[#D62828]"
-        />
-        <span className="text-[13px] leading-[1.5] text-[#1B2A5E]/80">
-          I confirm I am authorised to represent this school.
-        </span>
-      </label>
-      {error && <p className="text-[12px] text-[#D62828]">{error}</p>}
-      <SubmitPill loading={loading}>Submit Nomination</SubmitPill>
     </form>
   );
 }

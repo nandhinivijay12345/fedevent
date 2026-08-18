@@ -1,7 +1,6 @@
-import { InstitutionAwardFields, NominationFields } from "./FormFields";
+import { InstitutionAwardFields } from "./FormFields";
 import { Modal, ModalHeader, SuccessBlock } from "./Modal";
 import { useInstitutionAwardForm } from "@/hooks/useInstitutionAwardForm";
-import { useNominateForm } from "@/hooks/useNominateForm";
 
 export function ConfirmAttendanceModal({
   open,
@@ -31,39 +30,6 @@ export function ConfirmAttendanceModal({
         />
       ) : (
         <InstitutionAwardFields track="school" {...form} />
-      )}
-    </Modal>
-  );
-}
-
-export function NominateModal({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
-  const form = useNominateForm();
-
-  const handleClose = () => {
-    onClose();
-    setTimeout(form.reset, 300);
-  };
-
-  return (
-    <Modal open={open} onClose={handleClose} labelledBy="nominate-title">
-      <ModalHeader
-        id="nominate-title"
-        eyebrow="Top 100 Nomination"
-        title="Nominate a school for India's Top 100."
-      />
-      {form.done ? (
-        <SuccessBlock
-          title="Nomination received."
-          body="Our team will verify the details against our records."
-        />
-      ) : (
-        <NominationFields {...form} />
       )}
     </Modal>
   );

@@ -79,12 +79,6 @@ export function FinalCTA() {
                       Enter the India Challenge
                     </a>
                   </div>
-                  <Link
-                    to="/nominate"
-                    className="text-[14px] text-white/70 underline-offset-4 hover:underline hover:text-white"
-                  >
-                    Nominate Your School →
-                  </Link>
                 </div>
               </Reveal>
 
