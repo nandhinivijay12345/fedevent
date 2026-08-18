@@ -118,3 +118,38 @@ export const sendIndividualAwardEmail = createServerFn({ method: "POST" })
       return { sent: false };
     }
   });
+
+const sendAttendeeEmailSchema = z.object({
+  to: z.string().email(),
+  name: z.string().min(1),
+  guestCount: z.number().int().min(0),
+});
+
+export const sendAttendeeEmail = createServerFn({ method: "POST" })
+  .validator((data: unknown) => sendAttendeeEmailSchema.parse(data))
+  .handler(async ({ data }) => {
+    const fromEmail = process.env.RESEND_FROM_EMAIL;
+    if (!fromEmail) {
+      console.error(
+        "[Resend] Missing RESEND_FROM_EMAIL environment variable — skipping attendee email.",
+      );
+      return { sent: false };
+    }
+
+    try {
+      const { resend } = await import("@/integrations/resend/client.server");
+      const { renderAttendeeEmail } = await import("@/lib/emailTemplate.server");
+
+      const { error } = await resend.emails.send({
+        from: `Future of Education <${fromEmail}>`,
+        to: data.to,
+        subject: "You're registered for Future of Education 2026",
+        html: renderAttendeeEmail({ name: data.name, guestCount: data.guestCount }),
+      });
+      if (error) throw error;
+      return { sent: true };
+    } catch (err) {
+      console.error("[Resend] Failed to send attendee email:", err);
+      return { sent: false };
+    }
+  });

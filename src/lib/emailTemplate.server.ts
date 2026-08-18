@@ -143,6 +143,95 @@ export function renderIndividualAwardEmail({
 </html>`.trim();
 }
 
+export function renderAttendeeEmail({
+  name,
+  guestCount,
+}: {
+  name: string;
+  guestCount: number;
+}): string {
+  const safeName = escapeHtml(name);
+  const p = (html: string) =>
+    `<p style="margin:0 0 16px;color:#1B2A5E;opacity:0.8;font-size:15px;line-height:1.7;">${html}</p>`;
+
+  const totalSeats = guestCount + 1;
+  const seatsLine =
+    guestCount === 0
+      ? `<strong>Seats confirmed: 1</strong> &mdash; just for you.`
+      : guestCount === 1
+        ? `<strong>Seats confirmed: 2</strong> &mdash; one for you and one for your guest.`
+        : `<strong>Seats confirmed: ${totalSeats}</strong> &mdash; one for you and ${guestCount} for your guests.`;
+
+  return `
+<!doctype html>
+<html>
+  <body style="margin:0;padding:0;background-color:#F4EDDC;font-family:Georgia,'Times New Roman',serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4EDDC;padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background-color:#ffffff;border-radius:16px;overflow:hidden;">
+            <tr>
+              <td style="background-color:#1B2A5E;padding:28px 32px;">
+                <span style="color:#ffffff;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Future of Education &mdash; Edition 4</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:36px 32px;">
+                <p style="margin:0 0 20px;color:#1B2A5E;font-size:15px;line-height:1.7;">Dear ${safeName},</p>
+
+                ${p(`Thank you for registering for the Future of Education Conference &mdash; Edition 4. Your seat is confirmed as an attendee.`)}
+
+                ${p(`We are delighted that you will be joining us on August 24, and we are glad you chose to spend the day with us.`)}
+
+                <h2 style="margin:28px 0 16px;color:#1B2A5E;font-size:17px;font-weight:600;">Your registration</h2>
+
+                ${p(seatsLine)}
+
+                <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 24px;">
+                  <tr>
+                    <td style="padding:4px 0;color:#1B2A5E;font-size:14px;">&#128197; <strong>Date:</strong> August 24, 2026</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 0;color:#1B2A5E;font-size:14px;">&#128336; <strong>Time:</strong> 10:00 AM &ndash; 6:00 PM</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:4px 0;color:#1B2A5E;font-size:14px;">&#128205; <strong>Venue:</strong> D7 Auditorium, IIT Madras Research Park, Chennai</td>
+                  </tr>
+                </table>
+
+                ${p(`Badges will be ready for collection on arrival. Do come a little ahead of time, so that registration is done with before the opening session.`)}
+
+                ${p(`The day brings together over 1,000 educators, school leaders, policymakers and founders, with 10+ speakers travelling in from across the world and the leadership of 100+ schools recognised among India's Top 100. The conference is presented by American World School and co-convened with the Western Association of Schools and Colleges (WASC) and the American International Accreditation Association of Schools and Colleges (AIAASC).`)}
+
+                ${p(`It will be a day of <strong>ideas, conversations, recognition and celebration</strong> &mdash; and we are delighted that you will be part of it.`)}
+
+                ${p(`For anything you need before the day, we are reachable on +91 82206 06367.`)}
+
+                ${p(`We look forward to welcoming you.`)}
+
+                <p style="margin:0;color:#1B2A5E;font-size:15px;line-height:1.6;">
+                  Warm regards,<br/>
+                  <strong>Nandhini Vijay</strong><br/>
+                  Director of Communications<br/>
+                  Future of Education &ndash; Edition 4<br/>
+                  American World School
+                </p>
+
+                <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(27,42,94,0.1);">
+                  <p style="margin:0;color:#1B2A5E;opacity:0.6;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">
+                    IITM Research Park · Chennai · 24 August 2026
+                  </p>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`.trim();
+}
+
 export function renderSchoolAwardEmail({
   recipientName,
   schoolName,
