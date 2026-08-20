@@ -15,6 +15,7 @@ import ckKumaravel from "@/assets/ckkumaravel.png";
 import meenakshi from "@/assets/meenakshi.png";
 import benjamin from "@/assets/benjamin.png";
 import gloria from "@/assets/gloria.png";
+import usha from "@/assets/usha.png";
 
 type Panelist = { name: string; title: string; org: string; image?: string; aspect: string };
 
@@ -37,6 +38,7 @@ const PANELISTS: Panelist[] = [
   { name: "CK Kumaravel", title: "Co-founder & CMD", org: "Naturals Salon & Spa", image: ckKumaravel, aspect: "3 / 4" },
   { name: "Benjamin J. Abott", title: "Chief of American Citizens Services", org: "U.S. Consulate General Chennai", image: benjamin, aspect: "4 / 5" },
   { name: "Gloria Brown", title: "Founder", org: "La Senda Global Academy", image: gloria, aspect: "3 / 4" },
+  { name: "Usha Iyer", title: "Managing Director", org: "The Green School Bangalore", image: usha, aspect: "4 / 5" },
 ];
 
 
@@ -107,7 +109,7 @@ export function Voices() {
             </h2>
           </div>
           <div className="text-[12px] uppercase tracking-[0.22em] text-[#6b7699]">
-            14 Speakers · More Announced Soon
+            15 Speakers · More Announced Soon
           </div>
         </div>
 
@@ -122,7 +124,7 @@ export function Voices() {
         </div>
 
         <div className="mt-16 hidden gap-x-10 sm:flex lg:hidden">
-          {[PANELISTS.slice(0, 7), PANELISTS.slice(7, 14)].map((col, ci) => (
+          {[PANELISTS.slice(0, 8), PANELISTS.slice(8, 15)].map((col, ci) => (
             <div key={ci} className="flex flex-1 flex-col">
               {col.map((p, i) => (
                 <SpeakerCard key={p.name} p={p} delay={i === 0 ? ci * 100 : 0} onOpen={() => setActive(p)} />
@@ -132,7 +134,7 @@ export function Voices() {
         </div>
 
         <div className="mt-16 hidden gap-x-10 lg:flex">
-          {[PANELISTS.slice(0, 5), PANELISTS.slice(5, 10), PANELISTS.slice(10, 14)].map((col, ci) => (
+          {[PANELISTS.slice(0, 5), PANELISTS.slice(5, 10), PANELISTS.slice(10, 15)].map((col, ci) => (
             <div key={ci} className="flex flex-1 flex-col">
               {col.map((p, i) => (
                 <SpeakerCard key={p.name} p={p} delay={i === 0 ? ci * 100 : 0} onOpen={() => setActive(p)} />
