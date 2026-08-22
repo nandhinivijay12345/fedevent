@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/Nav";
 import { SuccessBlock } from "@/components/Modal";
+import { ClosedNotice } from "@/components/ClosedNotice";
 import { ParticipationFields } from "@/components/FormFields";
 import { useParticipationForm } from "@/hooks/useParticipationForm";
+import { REGISTRATIONS_CLOSED } from "@/lib/registration";
 import { FormPageShell } from "./confirm";
 
 export const Route = createFileRoute("/participate")({
@@ -27,7 +29,9 @@ function ParticipatePage() {
         lede="Come see the future of education in action. Register as a visitor and we'll have your pass ready at the door."
         deadline="Registration and confirmation close August 20, 2026"
       >
-        {form.done ? (
+        {REGISTRATIONS_CLOSED ? (
+          <ClosedNotice />
+        ) : form.done ? (
           <SuccessBlock
             title="See you on the stage!"
             body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."

@@ -2,9 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Nav } from "@/components/Nav";
 import { SuccessBlock, SegmentedToggle } from "@/components/Modal";
+import { ClosedNotice } from "@/components/ClosedNotice";
 import { InstitutionAwardFields, IndividualAwardFields } from "@/components/FormFields";
 import { useInstitutionAwardForm, type InstitutionTrack } from "@/hooks/useInstitutionAwardForm";
 import { useIndividualAwardForm } from "@/hooks/useIndividualAwardForm";
+import { REGISTRATIONS_CLOSED } from "@/lib/registration";
 import confirmStage from "@/assets/confirm-stage.jpg";
 import confirmStageCollage from "@/assets/confirm-stage-collage.png";
 
@@ -106,17 +108,21 @@ function ConfirmPage() {
                 </div>
 
                 <p className="fade-up mt-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D62828]" style={{ animationDelay: "360ms" }}>
-                  Registration and confirmation close August 20, 2026
+                  {REGISTRATIONS_CLOSED
+                    ? "Registration and confirmation are now closed"
+                    : "Registration and confirmation close August 20, 2026"}
                 </p>
 
-                <div className="fade-up mt-7" style={{ animationDelay: "420ms" }}>
-                  <a
-                    href="#registration-form"
-                    className="inline-flex items-center justify-center rounded-full bg-[#D62828] px-8 py-4 text-[14px] font-semibold tracking-wide text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#b71f1f] hover:shadow-[0_18px_40px_-16px_rgba(214,40,40,0.6)]"
-                  >
-                    Begin Registration
-                  </a>
-                </div>
+                {!REGISTRATIONS_CLOSED && (
+                  <div className="fade-up mt-7" style={{ animationDelay: "420ms" }}>
+                    <a
+                      href="#registration-form"
+                      className="inline-flex items-center justify-center rounded-full bg-[#D62828] px-8 py-4 text-[14px] font-semibold tracking-wide text-white transition-all duration-300 hover:scale-[1.02] hover:bg-[#b71f1f] hover:shadow-[0_18px_40px_-16px_rgba(214,40,40,0.6)]"
+                    >
+                      Begin Registration
+                    </a>
+                  </div>
+                )}
               </div>
 
               {/* RIGHT — photo */}
@@ -149,7 +155,7 @@ function ConfirmPage() {
           />
 
           <div className="relative mx-auto w-full max-w-[1320px] px-6 md:px-10">
-            {!done && (
+            {!REGISTRATIONS_CLOSED && !done && (
               <div className="mb-12 text-center">
                 <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#1B2A5E]/70">
                   Award Category
@@ -167,54 +173,60 @@ function ConfirmPage() {
               <span className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#D62828] via-[#D62828] to-[#F4EDDC]" />
 
               <div className="mx-auto max-w-[960px]">
-                {!done && (
-                  <div className="mb-12">
-                    <div className="flex items-center gap-3">
-                      <span className="h-[2px] w-6 bg-[#D62828]" />
-                      <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#1B2A5E]/70">
-                        {TRACK_OPTIONS.find((o) => o.value === track)?.label}
-                      </span>
-                    </div>
-                    <p className="mt-4 max-w-[640px] font-serif text-[19px] leading-[1.5] tracking-[-0.01em] text-[#1B2A5E]">
-                      {TRACK_DESCRIPTIONS[track]}
-                    </p>
-                    <div className="mt-8 h-px w-full bg-[#1B2A5E]/10" />
-                  </div>
-                )}
-                {track === "individual" ? (
-                  individualForm.done ? (
-                    <SuccessBlock
-                      title="See you on the stage!"
-                      body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
-                    />
-                  ) : (
-                    <IndividualAwardFields {...individualForm} />
-                  )
-                ) : track === "school" ? (
-                  schoolForm.done ? (
-                    <SuccessBlock
-                      title="See you on the stage!"
-                      body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
-                    />
-                  ) : (
-                    <InstitutionAwardFields track="school" {...schoolForm} />
-                  )
-                ) : track === "organization" ? (
-                  organizationForm.done ? (
-                    <SuccessBlock
-                      title="See you on the stage!"
-                      body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
-                    />
-                  ) : (
-                    <InstitutionAwardFields track="organization" {...organizationForm} />
-                  )
-                ) : collegeForm.done ? (
-                  <SuccessBlock
-                    title="See you on the stage!"
-                    body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
-                  />
+                {REGISTRATIONS_CLOSED ? (
+                  <ClosedNotice />
                 ) : (
-                  <InstitutionAwardFields track="college" {...collegeForm} />
+                  <>
+                  {!done && (
+                    <div className="mb-12">
+                      <div className="flex items-center gap-3">
+                        <span className="h-[2px] w-6 bg-[#D62828]" />
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#1B2A5E]/70">
+                          {TRACK_OPTIONS.find((o) => o.value === track)?.label}
+                        </span>
+                      </div>
+                      <p className="mt-4 max-w-[640px] font-serif text-[19px] leading-[1.5] tracking-[-0.01em] text-[#1B2A5E]">
+                        {TRACK_DESCRIPTIONS[track]}
+                      </p>
+                      <div className="mt-8 h-px w-full bg-[#1B2A5E]/10" />
+                    </div>
+                  )}
+                  {track === "individual" ? (
+                    individualForm.done ? (
+                      <SuccessBlock
+                        title="See you on the stage!"
+                        body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
+                      />
+                    ) : (
+                      <IndividualAwardFields {...individualForm} />
+                    )
+                  ) : track === "school" ? (
+                    schoolForm.done ? (
+                      <SuccessBlock
+                        title="See you on the stage!"
+                        body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
+                      />
+                    ) : (
+                      <InstitutionAwardFields track="school" {...schoolForm} />
+                    )
+                  ) : track === "organization" ? (
+                    organizationForm.done ? (
+                      <SuccessBlock
+                        title="See you on the stage!"
+                        body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
+                      />
+                    ) : (
+                      <InstitutionAwardFields track="organization" {...organizationForm} />
+                    )
+                  ) : collegeForm.done ? (
+                    <SuccessBlock
+                      title="See you on the stage!"
+                      body="Your spot is locked in and confirmation is on its way to your inbox. Need anything before August 24? Reach us at +91 82206 06367."
+                    />
+                  ) : (
+                    <InstitutionAwardFields track="college" {...collegeForm} />
+                  )}
+                  </>
                 )}
               </div>
             </div>
