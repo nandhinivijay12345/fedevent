@@ -1,6 +1,6 @@
 export function ClosedNotice({
   title = "Registrations are closed",
-  body = "Thank you for the incredible response — registration for FED 2026 is now closed. Follow our socials for updates on the day.",
+  body = "Thank you for the incredible response — registration for FED 2026 is now closed. Need to reach our team? Call +91 82206 06367.",
 }: {
   title?: string;
   body?: string;

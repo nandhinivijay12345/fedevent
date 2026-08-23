@@ -9,13 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ParticipateRouteImport } from './routes/participate'
-import { Route as ConfirmRouteImport } from './routes/confirm'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ConfirmRouteImport } from './routes/confirm'
+import { Route as ParticipateRouteImport } from './routes/participate'
 
-const ParticipateRoute = ParticipateRouteImport.update({
-  id: '/participate',
-  path: '/participate',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConfirmRoute = ConfirmRouteImport.update({
@@ -23,9 +23,9 @@ const ConfirmRoute = ConfirmRouteImport.update({
   path: '/confirm',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ParticipateRoute = ParticipateRouteImport.update({
+  id: '/participate',
+  path: '/participate',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -61,11 +61,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/participate': {
-      id: '/participate'
-      path: '/participate'
-      fullPath: '/participate'
-      preLoaderRoute: typeof ParticipateRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/confirm': {
@@ -75,11 +75,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfirmRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/participate': {
+      id: '/participate'
+      path: '/participate'
+      fullPath: '/participate'
+      preLoaderRoute: typeof ParticipateRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
