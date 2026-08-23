@@ -3,6 +3,7 @@ import { Reveal } from "./Reveal";
 import { Link } from "@tanstack/react-router";
 import { WorldMap, MAP_W, MAP_H } from "./GlobalSummit";
 import ctaBg from "@/assets/cta-bg-2.png";
+import { ATTENDEE_REGISTRATIONS_CLOSED } from "@/lib/registration";
 
 export function FinalCTA() {
   return (
@@ -64,12 +65,14 @@ export function FinalCTA() {
               <Reveal delay={500}>
                 <div className="mt-12 flex flex-col items-center gap-5">
                   <div className="flex flex-wrap items-center justify-center gap-4">
-                    <Link
-                      to="/confirm"
-                      className="inline-flex w-full items-center justify-center rounded-full bg-[#D62828] px-7 py-3.5 text-[14px] font-semibold text-white transition hover:bg-[#b71f1f] sm:w-auto"
-                    >
-                      Awardee Registration
-                    </Link>
+                    {!ATTENDEE_REGISTRATIONS_CLOSED && (
+                      <Link
+                        to="/participate"
+                        className="inline-flex w-full items-center justify-center rounded-full bg-[#D62828] px-7 py-3.5 text-[14px] font-semibold text-white transition hover:bg-[#b71f1f] sm:w-auto"
+                      >
+                        Attendee Registration
+                      </Link>
+                    )}
                     <a
                       href="https://www.kidspreneur.org/global-flash-challenge"
                       target="_blank"
@@ -79,6 +82,11 @@ export function FinalCTA() {
                       Enter the India Challenge
                     </a>
                   </div>
+                  {!ATTENDEE_REGISTRATIONS_CLOSED && (
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#D62828]">
+                      Attendee registration closes today at 2:00 PM
+                    </p>
+                  )}
                 </div>
               </Reveal>
 

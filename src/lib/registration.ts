@@ -1,1 +1,2 @@
-export const REGISTRATIONS_CLOSED = true;
+export const ATTENDEE_REGISTRATIONS_CLOSED = false;
+export const AWARDEE_REGISTRATIONS_CLOSED = true;

@@ -6,7 +6,7 @@ import { ClosedNotice } from "@/components/ClosedNotice";
 import { InstitutionAwardFields, IndividualAwardFields } from "@/components/FormFields";
 import { useInstitutionAwardForm, type InstitutionTrack } from "@/hooks/useInstitutionAwardForm";
 import { useIndividualAwardForm } from "@/hooks/useIndividualAwardForm";
-import { REGISTRATIONS_CLOSED } from "@/lib/registration";
+import { AWARDEE_REGISTRATIONS_CLOSED } from "@/lib/registration";
 import confirmStage from "@/assets/confirm-stage.jpg";
 import confirmStageCollage from "@/assets/confirm-stage-collage.png";
 
@@ -108,12 +108,12 @@ function ConfirmPage() {
                 </div>
 
                 <p className="fade-up mt-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#D62828]" style={{ animationDelay: "360ms" }}>
-                  {REGISTRATIONS_CLOSED
+                  {AWARDEE_REGISTRATIONS_CLOSED
                     ? "Registration and confirmation are now closed"
                     : "Registration and confirmation close August 20, 2026"}
                 </p>
 
-                {!REGISTRATIONS_CLOSED && (
+                {!AWARDEE_REGISTRATIONS_CLOSED && (
                   <div className="fade-up mt-7" style={{ animationDelay: "420ms" }}>
                     <a
                       href="#registration-form"
@@ -155,7 +155,7 @@ function ConfirmPage() {
           />
 
           <div className="relative mx-auto w-full max-w-[1320px] px-6 md:px-10">
-            {!REGISTRATIONS_CLOSED && !done && (
+            {!AWARDEE_REGISTRATIONS_CLOSED && !done && (
               <div className="mb-12 text-center">
                 <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#1B2A5E]/70">
                   Award Category
@@ -173,8 +173,11 @@ function ConfirmPage() {
               <span className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#D62828] via-[#D62828] to-[#F4EDDC]" />
 
               <div className="mx-auto max-w-[960px]">
-                {REGISTRATIONS_CLOSED ? (
-                  <ClosedNotice />
+                {AWARDEE_REGISTRATIONS_CLOSED ? (
+                  <ClosedNotice
+                    title="Awardee registration is closed"
+                    body="Awardee registration for FED 2026 is now closed. Attending as a visitor? Attendee registration is still open. Need to reach our team? Call +91 82206 06367."
+                  />
                 ) : (
                   <>
                   {!done && (
