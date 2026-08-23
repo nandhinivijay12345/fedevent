@@ -174,10 +174,7 @@ function ConfirmPage() {
 
               <div className="mx-auto max-w-[960px]">
                 {AWARDEE_REGISTRATIONS_CLOSED ? (
-                  <ClosedNotice
-                    title="Awardee registration is closed"
-                    body="Awardee registration for FED 2026 is now closed. Attending as a visitor? Attendee registration is still open. Need to reach our team? Call +91 82206 06367."
-                  />
+                  <ClosedNotice />
                 ) : (
                   <>
                   {!done && (
