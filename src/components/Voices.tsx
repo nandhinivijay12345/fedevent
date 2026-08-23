@@ -40,7 +40,7 @@ const PANELISTS: Panelist[] = [
   { name: "Benjamin J. Abott", title: "Chief of American Citizens Services", org: "U.S. Consulate General Chennai", image: benjamin, aspect: "4 / 5" },
   { name: "Gloria Brown", title: "Founder", org: "La Senda Global Academy", image: gloria, aspect: "3 / 4" },
   { name: "Usha Iyer", title: "Managing Director", org: "The Green School Bangalore", image: usha, aspect: "4 / 5" },
-  { name: "Anil Srinivasa", title: "Founder", org: "Kruu", image: anilSrinivasa, aspect: "4 / 5" },
+  { name: "Prof. Anil Srinivasan", title: "Founder", org: "Kruu", image: anilSrinivasa, aspect: "4 / 5" },
 ];
 
 
